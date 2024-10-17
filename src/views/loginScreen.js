@@ -1,40 +1,40 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import React, { useContext, useEffect } from 'react';
+import { View, Text, Button, StyleSheet } from 'react-native';
+import * as Google from 'expo-auth-session/providers/google';
+import * as WebBrowser from 'expo-web-browser';
+import { useNavigation } from '@react-navigation/native';
+import { UserContext } from '../../App';
 
-const LoginScreen = ({ navigation }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+WebBrowser.maybeCompleteAuthSession();
 
-  const handleLogin = () => {
-    // Simple validation check
-    if (email === "test@example.com" && password === "password") {
-      navigation.navigate("HomeScreen"); // Replace with your home screen
-    } else {
-      alert("Invalid email or password");
+const LoginScreen = () => {
+  const navigation = useNavigation();
+  const {role, subject} = useContext(UserContext);
+
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    webClientId: '222895958736-8k1pnc7jq9qqj7d36h2ta6rov24e15cp.apps.googleusercontent.com',
+    selectAccount: true,
+  });
+
+  useEffect(() => {
+    if (response?.type === 'success') {
+      const { authentication } = response;
+      console.log(authentication);
+      navigation.navigate('Home'); 
     }
-  };
+  }, [response]);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
-      
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-      />
-      
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
+      <Text style={styles.title}>Login with Google</Text>
 
-      <Button title="Login" onPress={handleLogin} />
+      <Button
+        disabled={!request}
+        title="Login with Google"
+        onPress={() => {
+          promptAsync();
+        }}
+      />
     </View>
   );
 };
@@ -42,23 +42,15 @@ const LoginScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: 'center',
     padding: 16,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
   },
   title: {
     fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
+    fontWeight: 'bold',
+    textAlign: 'center',
     marginBottom: 24,
-  },
-  input: {
-    height: 40,
-    borderColor: "#ccc",
-    borderWidth: 1,
-    marginBottom: 12,
-    paddingHorizontal: 8,
-    borderRadius: 4,
   },
 });
 

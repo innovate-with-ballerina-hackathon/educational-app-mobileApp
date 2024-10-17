@@ -1,17 +1,21 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Button, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { UserContext } from '../../App';
 
 const RoleSelectionScreen = () => {
   const navigation = useNavigation();
+  const {setRole} = useContext(UserContext);
 
   const handleStudentSelection = () => {
     // Navigate directly to login if student
+    setRole('student');
     navigation.navigate('LoginScreen');
   };
 
   const handleTutorSelection = () => {
     // Navigate to subject selection if tutor
+    setRole('tutor');
     navigation.navigate('SubjectSelection');
   };
 

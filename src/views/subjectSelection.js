@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Button, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const SubjectSelectionScreen = () => {
   const navigation = useNavigation();
+  const {setSubject} = useContext(UserContext);
 
   const handleSubjectSelection = (subject) => {
-    // You can handle subject-specific logic if needed here
+    setSubject(subject);
     console.log(`Selected subject: ${subject}`);
-    // After subject selection, navigate to login
     navigation.navigate('LoginScreen');
   };
 
