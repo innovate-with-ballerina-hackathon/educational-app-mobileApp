@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { MotiText, MotiView , AnimatePresence} from 'moti';
 import { TextMarquee } from '../components/textMarquee';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const equations = ['E = mc^2', 'F = ma', 'a^2 + b^2 = c^2', 'V = IR', 'd = vt', 'pV = nRT'];
 
@@ -10,13 +11,26 @@ const LoadUpScreen = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    // Navigate to the login screen after a delay
-    setTimeout(() => {
-      navigation.navigate("RoleSelection");
-    }, 5000); // Navigate after 5 seconds
+    const checkInitialStep = async () => {
+      try {
+        const hasCompletedLoadup = await AsyncStorage.getItem('hasCompletedLoadup');
+
+        if (hasCompletedLoadup === 'true') {
+          navigation.navigate('Home');
+        } else {
+          setTimeout(() => {
+            navigation.navigate('RoleSelection');
+            AsyncStorage.setItem('hasCompletedLoadup', 'true');
+          }, 5000);
+        }
+      } catch (error) {
+        console.log('Error checking loadup status:', error);
+      }
+    };
+
+    checkInitialStep();
   }, [navigation]);
 
-  // Function to create the marquee effect
   const renderMarquee = () => {
     return equations.map((equation, index) => (
       <Text key={index} style={styles.equationText}>{equation}</Text>
@@ -26,7 +40,6 @@ const LoadUpScreen = () => {
   return (
     <View style={styles.container}>
 
-      {/* Welcome text with Moti animation */}
       <MotiView
         from={{ opacity: 0, translateY: -50 }}
         animate={{ opacity: 1, translateY: 0 }}
