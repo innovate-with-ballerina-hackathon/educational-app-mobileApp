@@ -6,6 +6,7 @@ import HomeScreen from '../views/homeScreen';
 import UpcomingSessionsScreen from '../views/upcomingSession';
 import TutorsScreen from '../views/tutorScreen';
 import ChatScreen from '../views/chatScreen';
+import TutorList from '../views/tutorList';
 
 const Tab = createBottomTabNavigator();
 
@@ -35,7 +36,8 @@ const BottomTabNavigator = () => {
       >
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="UpcomingSessions" component={UpcomingSessionsScreen} />
-        <Tab.Screen name="Tutors" component={TutorsScreen} />
+        {/* <Tab.Screen name="Tutors" component={TutorsScreen} /> */}
+        <Tab.Screen name="Tutors" component={TutorList} />
         <Tab.Screen name="Chat" component={ChatScreen} />
       </Tab.Navigator>
   );

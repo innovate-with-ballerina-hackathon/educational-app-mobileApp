@@ -8,6 +8,10 @@ import RoleSelectionScreen from "../views/roleSelection";
 import SubjectSelectionScreen from "../views/subjectSelection";
 import HomeScreen from "../views/homeScreen";
 import BottomTabNavigator from "./bottomTabNavigator";
+import TutorList from "../views/tutorList";
+import TutorDetail from "../views/tutorDetail";
+import SessionSelection from "../views/sessionSelection";
+import PaymentPage from "../views/paymentPage";
 
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +29,11 @@ export default function RootNavigator(){
                 <Stack.Screen name="LoginScreen" component={LoginScreen} />
                 <Stack.Screen name="RoleSelection" component={RoleSelectionScreen} />
                 <Stack.Screen name="SubjectSelection" component={SubjectSelectionScreen} />
+
+                <Stack.Screen name="TutorList" component={TutorList}/>
+                <Stack.Screen name="TutorDetail" component={TutorDetail}/>
+                <Stack.Screen name="SessionSelection" component={SessionSelection}/>
+                <Stack.Screen name="PaymentPage" component={PaymentPage}/>
                 <Stack.Screen name="HomeScreen" component={HomeScreen} />
             </Stack.Navigator>
         </NavigationContainer>

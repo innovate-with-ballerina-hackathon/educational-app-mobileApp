@@ -5,12 +5,14 @@ import { UserContext } from '../../App';
 
 const RoleSelectionScreen = () => {
   const navigation = useNavigation();
-  const {setRole} = useContext(UserContext);
+  const {role, setRole} = useContext(UserContext);
+  // const [role, setRole] = useState('');
 
   const handleStudentSelection = () => {
     // Navigate directly to login if student
     setRole('student');
-    navigation.navigate('LoginScreen');
+    // navigation.navigate('LoginScreen');
+    navigation.navigate('Home');
   };
 
   const handleTutorSelection = () => {
@@ -19,10 +21,24 @@ const RoleSelectionScreen = () => {
     navigation.navigate('SubjectSelection');
   };
 
+  // const handleRoleSelection = (role) => {
+  //   // Set the role based on the parameter
+  //   setRole(role);
+  
+  //   // Navigate based on the role
+  //   if (role === 'student') {
+  //     navigation.navigate('LoginScreen');
+  //   } else if (role === 'tutor') {
+  //     navigation.navigate('SubjectSelection');
+  //   }
+  // };
+
   return (
     <View style={styles.container}>
       <Button title="Student" onPress={handleStudentSelection} />
       <Button title="Tutor" onPress={handleTutorSelection} />
+      {/* <Button title="Student" onPress={handleRoleSelection('student')} />
+      <Button title="Tutor" onPress={handleRoleSelection('tutor')} /> */}
     </View>
   );
 };

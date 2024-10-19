@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { View, Button, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { UserContext } from '../../App';
 
 const SubjectSelectionScreen = () => {
   const navigation = useNavigation();
@@ -9,7 +10,8 @@ const SubjectSelectionScreen = () => {
   const handleSubjectSelection = (subject) => {
     setSubject(subject);
     console.log(`Selected subject: ${subject}`);
-    navigation.navigate('LoginScreen');
+    // navigation.navigate('LoginScreen');
+    navigation.navigate('SessionSelection');
   };
 
   return (
