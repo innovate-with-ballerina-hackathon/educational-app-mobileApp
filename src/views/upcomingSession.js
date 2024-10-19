@@ -1,8 +1,10 @@
+import { Text } from "@gluestack-ui/themed";
+
 const UpComingSession = () => {
     return (
-        <div>
-            <h1>Upcoming Session</h1>
-        </div>
+       
+        <Text>Upcoming Session</Text>
+       
     )
 };
 

@@ -9,6 +9,7 @@ import SubjectSelectionScreen from "../views/subjectSelection";
 import HomeScreen from "../views/homeScreen";
 import BottomTabNavigator from "./bottomTabNavigator";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ArticleDetailPage } from "../views/articleDetailPage";
 
 const Stack = createNativeStackNavigator();
 
@@ -54,7 +55,8 @@ export default function RootNavigator(){
                 <Stack.Screen name="LoginScreen" component={LoginScreen} />
                 <Stack.Screen name="RoleSelection" component={RoleSelectionScreen} />
                 <Stack.Screen name="SubjectSelection" component={SubjectSelectionScreen} />
-                <Stack.Screen name="HomeScreen" component={HomeScreen} />
+                {/* <Stack.Screen name="HomeScreen" component={HomeScreen} /> */}
+                <Stack.Screen name="ArticleDetail" component={ArticleDetailPage} />
             </Stack.Navigator>
         </NavigationContainer>
 

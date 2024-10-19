@@ -1,8 +1,7 @@
+import { Text } from "@gluestack-ui/themed";
 const TutorScreen = () => {
     return (
-        <div>
-            <h1>Tutor Screen</h1>
-        </div>
+        <Text>Tutor Screen</Text>
     );
 };
 
