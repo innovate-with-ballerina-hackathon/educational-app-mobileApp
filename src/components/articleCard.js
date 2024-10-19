@@ -1,7 +1,8 @@
-import { Box, Card, Heading, Image, VStack } from "@gluestack-ui/themed";
-import { TouchableOpacity } from "react-native";
-import { WIDTH } from "../helpers/constants";
+import React from 'react';
+import { Card, CardMedia, CardContent, Typography, Box } from '@mui/material';
+// import { useNavigate } from 'react-router-dom';
 import { useNavigation } from "@react-navigation/native";
+
 
 
 export const articleList = [
@@ -33,36 +34,33 @@ export const articleList = [
         imageUrl:
             "https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
     }
-]
+];
 
 export const ArticleCard = ({ title, id, imageUrl }) => {
     const navigation = useNavigation();
-    return (
-        <TouchableOpacity onPress={() => navigation.navigate('ArticleDetail', { id: id, title: title })}>
-            <Card
-                width={'10px'}
-                height={80}
-                backgroundColor="#ffffff"
-                style={{ borderRadius: 10 }}
-                m={"$3"}
-                px="$0"
-                >
-                <VStack justifyContent="center" alignItems="center">
-                    <Image
-                        alt="article image"
-                        source={{ uri: imageUrl ?? "https://tse2.mm.bing.net/th?id=OIP.Hxm4Wr6uccQwifp7HH7uYQHaE8&pid=Api&P=0&h=220" }}
-                        style={{
-                            width: '50%', // Adjust the width
-                            height: 180, // Adjust the height
-                            borderRadius: 10,   // Maintain the borderRadius
-                        }}
-                        opacity={0.8}
-                        resizeMode="cover"
-                    />
-                    <Heading size="$xl" fontWeight={600}> {title}</Heading>
-                </VStack>
-            </Card>
-        </TouchableOpacity>
 
-    )
+    return (
+        <Box 
+            onClick={() => navigation.navigate('ArticleDetail', { id: id, title: title })} 
+            sx={{ 
+                cursor: 'pointer', 
+                maxWidth: 345, 
+                margin: 2 
+            }}
+        >
+            <Card>
+                <CardMedia
+                    component="img"
+                    height="180"
+                    image={imageUrl || "https://tse2.mm.bing.net/th?id=OIP.Hxm4Wr6uccQwifp7HH7uYQHaE8&pid=Api&P=0&h=220"}
+                    alt="article image"
+                />
+                <CardContent>
+                    <Typography variant="h5" component="div">
+                        {title}
+                    </Typography>
+                </CardContent>
+            </Card>
+        </Box>
+    );
 }
