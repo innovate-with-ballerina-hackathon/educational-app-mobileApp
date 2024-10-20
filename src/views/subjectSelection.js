@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { UserContext } from '../../App';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SubjectSelectionScreen = () => {
   const navigation = useNavigation();
@@ -9,7 +10,7 @@ const SubjectSelectionScreen = () => {
 
   const handleSubjectSelection = (subject) => {
     setSubject(subject);
-    console.log(`Selected subject: ${subject}`);
+    AsyncStorage.setItem('subject', subject);
     navigation.navigate('LoginScreen');
   };
 

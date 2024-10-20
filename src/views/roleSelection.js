@@ -1,7 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useContext , useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { UserContext } from '../../App';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const RoleSelectionScreen = () => {
   const navigation = useNavigation();
@@ -9,11 +10,13 @@ const RoleSelectionScreen = () => {
 
   const handleStudentSelection = () => {
     setRole('student');
+    AsyncStorage.setItem('role', 'student');
     navigation.navigate('LoginScreen');
   };
 
   const handleTutorSelection = () => {
     setRole('tutor');
+    AsyncStorage.setItem('role', 'tutor');
     navigation.navigate('SubjectSelection');
   };
 
