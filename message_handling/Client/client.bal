@@ -32,13 +32,13 @@ service /chat on new http:Listener(8090) {
             select b;
     }
 
-    resource function post student/startChat/[int tutor_id]/[int student_id]() returns error? {
-        check ChatStudent(tutor_id, student_id);// this is no use connect with server using frontend directly
-        return;
+    resource function post student/startChat/[int tutor_id]/[int student_id]() returns string|error {
+        //check ChatStudent(tutor_id, student_id);// this is no use connect with server using frontend directly
+        return "ws://localhost:9090/chat/student"+tutor_id.toString()+student_id.toString();
     }
-    resource function post teacher/startChat/[int tutor_id]/[int student_id]() returns error? {
-        check ChatTeacher(tutor_id, student_id);// this is no use connect with server using frontend directly
-        return;
+    resource function post teacher/startChat/[int tutor_id]/[int student_id]() returns string|error {
+        //check ChatTeacher(tutor_id, student_id);// this is no use connect with server using frontend directly
+        return "ws://localhost:9090/chat/teacher"+tutor_id.toString()+student_id.toString();
     }
 
 }
@@ -70,54 +70,54 @@ function messaging(websocket:Client chatClient) returns error? {
     }
 }
 
-function  ChatStudent(int tutor_id, int student_id) returns error? {
-    // Create a new WebSocket client.
-    string s_id=student_id.toString();
-    string t_id=tutor_id.toString();
-    string url="ws://localhost:9090/chat/student/"+t_id+"/"+s_id;
-    websocket:Client chatClient = check new (url);
-    string message = check chatClient->readMessage();
-    string message2 = check chatClient->readMessage();
-    io:println(message);
-    io:println(message2);
-    //_= check messaging(chatClient);
-    while true {
-            string textResp = check chatClient->readMessage();
-            string msg = io:readln("");
-            if (msg == "exit") {
-                check chatClient->close();
-                return;
-            } else {
-                io:println("Received: ", textResp);
-                check chatClient->writeMessage(msg);
+// function  ChatStudent(int tutor_id, int student_id) returns error? {
+//     // Create a new WebSocket client.
+//     string s_id=student_id.toString();
+//     string t_id=tutor_id.toString();
+//     string url="ws://localhost:9090/chat/student/"+t_id+"/"+s_id;
+//     websocket:Client chatClient = check new (url);
+//     string message = check chatClient->readMessage();
+//     string message2 = check chatClient->readMessage();
+//     io:println(message);
+//     io:println(message2);
+//     //_= check messaging(chatClient);
+//     while true {
+//             string textResp = check chatClient->readMessage();
+//             string msg = io:readln("");
+//             if (msg == "exit") {
+//                 check chatClient->close();
+//                 return;
+//             } else {
+//                 io:println("Received: ", textResp);
+//                 check chatClient->writeMessage(msg);
                 
-            }
-        }
-}
+//             }
+//         }
+// }
 
-function  ChatTeacher(int tutor_id, int student_id) returns error? {
-    // Create a new WebSocket client.
-    string s_id=student_id.toString();
-    string t_id=tutor_id.toString();
-    string url="ws://localhost:9090/chat/teacher/"+t_id+"/"+s_id;
-    websocket:Client chatClient = check new (url);
-    string message = check chatClient->readMessage();
-    string message2 = check chatClient->readMessage();
-    io:println(message);
-    io:println(message2);
-    //_= check messaging(chatClient);
-    while true {
-            string textResp = check chatClient->readMessage();
+// function  ChatTeacher(int tutor_id, int student_id) returns error? {
+//     // Create a new WebSocket client.
+//     string s_id=student_id.toString();
+//     string t_id=tutor_id.toString();
+//     string url="ws://localhost:9090/chat/teacher/"+t_id+"/"+s_id;
+//     websocket:Client chatClient = check new (url);
+//     string message = check chatClient->readMessage();
+//     string message2 = check chatClient->readMessage();
+//     io:println(message);
+//     io:println(message2);
+//     //_= check messaging(chatClient);
+//     while true {
+//             string textResp = check chatClient->readMessage();
             
-            string msg = io:readln("");
-            if (msg == "exit") {
-                check chatClient->close();
-                return;
-            } else {
-                io:println("Received: ", textResp);
-                check chatClient->writeMessage(msg);
+//             string msg = io:readln("");
+//             if (msg == "exit") {
+//                 check chatClient->close();
+//                 return;
+//             } else {
+//                 io:println("Received: ", textResp);
+//                 check chatClient->writeMessage(msg);
                 
-            }
-        }
-}
+//             }
+//         }
+// }
 
