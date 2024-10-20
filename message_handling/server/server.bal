@@ -103,7 +103,7 @@ service class ChatServerforStudent {
 
         // Add the WebSocket connection to the map using a unique key based on tutor and student IDs.
         lock {
-            connectionsMap[getConnectionKey(self.tutor_id, self.student_id)] = caller;
+            connectionsMap[getConnectionKey(self.tutor_id, self.student_id,"student")] = caller;
         }
 
         // Notify the tutor and student that the connection is established.
@@ -112,24 +112,32 @@ service class ChatServerforStudent {
     }
 
     // When a message is received on the WebSocket connection.
-    remote function onMessage(websocket:Caller caller, string text) returns error? {
-        // Prepare the message to be exchanged between tutor and student.
-        string tutor = check getUsername(caller, TUTOR_ID_KEY);
-        string student = check getUsername(caller, STUDENT_ID_KEY);
-        string msg = "Message from " + tutor + " to " + student + ": " + text;// need to store messagein db
-        // Store the message in the database
-        MessageWrite message = {sender_id: self.tutor_id, receiver_id: self.student_id, message: text, timestamp: "2021-09-01 12:00:00", sender_type: "students", receiver_type: "tutors"};
-        _ = check self.db->execute(`INSERT INTO tutoring.messages (sender_id,receiver_id,message,timestamp, sender_type,receiver_type) VALUES (${message.sender_id}, ${message.receiver_id}, ${message.message}, ${message.timestamp}, ${message.sender_type}, ${message.receiver_type});`);
-        io:println(msg);  // Log the message.
+    // When a message is received from the student, route it to the tutor.
+remote function onMessage(websocket:Caller caller, string text) returns error? {
+    string msg = "Message from Student " + self.student_id.toString() + " to Tutor " + self.tutor_id.toString() + ": " + text;
 
-        // Send the message only to the tutor and student in the current session.
-        check sendMessageToRelevantParty2(self.tutor_id, self.student_id, msg);
-    }
+    // Store the message in the database
+    MessageWrite message = {
+        sender_id: self.student_id,
+        receiver_id: self.tutor_id,
+        message: text,
+        timestamp: "2021-09-01 12:00:00", // Timestamp should be dynamically generated
+        sender_type: "students",
+        receiver_type: "tutors"
+    };
+    _ = check self.db->execute(`INSERT INTO tutoring.messages (sender_id,receiver_id,message,timestamp, sender_type,receiver_type) VALUES (${message.sender_id}, ${message.receiver_id}, ${message.message}, ${message.timestamp}, ${message.sender_type}, ${message.receiver_type});`);
+
+    io:println(msg);  // Log the message.
+
+    // Send the message to the relevant tutor
+    check sendMessageToRelevantTeacher(self.tutor_id, self.student_id, text,"teacher");
+}
+
 
     // When the WebSocket connection is closed.
     remote function onClose(websocket:Caller caller, int statusCode, string reason) returns error? {
         lock {
-            _ = connectionsMap.remove(getConnectionKey(self.tutor_id, self.student_id));
+            _ = connectionsMap.remove(getConnectionKey(self.tutor_id, self.student_id,"student"));
         }
         string tutor = check getUsername(caller, TUTOR_ID_KEY);
         string student = check getUsername(caller, STUDENT_ID_KEY);
@@ -168,7 +176,7 @@ service class ChatServerforTeacher {
 
         // Add the WebSocket connection to the map using a unique key based on tutor and student IDs.
         lock {
-            connectionsMap[getConnectionKey(self.tutor_id, self.student_id)] = caller;
+            connectionsMap[getConnectionKey(self.tutor_id, self.student_id,"teacher")] = caller;
         }
 
         // Notify the tutor and student that the connection is established.
@@ -178,23 +186,29 @@ service class ChatServerforTeacher {
 
     // When a message is received on the WebSocket connection.
     remote function onMessage(websocket:Caller caller, string text) returns error? {
-        // Prepare the message to be exchanged between tutor and student.
-        string tutor = check getUsername(caller, TUTOR_ID_KEY);
-        string student = check getUsername(caller, STUDENT_ID_KEY);
-        string msg = "Message from " + tutor + " to " + student + ": " + text;// need to store messagein db
-        // Store the message in the database
-        MessageWrite message = {sender_id: self.tutor_id, receiver_id: self.student_id, message: text, timestamp: "2021-09-01 12:00:00", sender_type: "tutors", receiver_type: "students"};
-        _ = check self.db->execute(`INSERT INTO tutoring.messages (sender_id,receiver_id,message,timestamp, sender_type,receiver_type) VALUES (${message.sender_id}, ${message.receiver_id}, ${message.message}, ${message.timestamp}, ${message.sender_type}, ${message.receiver_type});`);
-        io:println(msg);  // Log the message.
+    string msg = "Message from Tutor " + self.tutor_id.toString() + " to Student " + self.student_id.toString() + ": " + text;
 
-        // Send the message only to the tutor and student in the current session.
-        check sendMessageToRelevantParty2(self.tutor_id, self.student_id, msg);
-    }
+    // Store the message in the database
+    MessageWrite message = {
+        sender_id: self.tutor_id,
+        receiver_id: self.student_id,
+        message: text,
+        timestamp: "2021-09-01 12:00:00", // Timestamp should be dynamically generated
+        sender_type: "tutors",
+        receiver_type: "students"
+    };
+    _ = check self.db->execute(`INSERT INTO tutoring.messages (sender_id,receiver_id,message,timestamp, sender_type,receiver_type) VALUES (${message.sender_id}, ${message.receiver_id}, ${message.message}, ${message.timestamp}, ${message.sender_type}, ${message.receiver_type});`);
+
+    io:println(msg);  // Log the message.
+
+    // Send the message to the relevant student
+    check sendMessageToRelevantStudent(self.tutor_id, self.student_id, text,"student");
+}
 
     // When the WebSocket connection is closed.
     remote function onClose(websocket:Caller caller, int statusCode, string reason) returns error? {
         lock {
-            _ = connectionsMap.remove(getConnectionKey(self.tutor_id, self.student_id));
+            _ = connectionsMap.remove(getConnectionKey(self.tutor_id, self.student_id,"teacher"));
         }
         string tutor = check getUsername(caller, TUTOR_ID_KEY);
         string student = check getUsername(caller, STUDENT_ID_KEY);
@@ -205,8 +219,8 @@ service class ChatServerforTeacher {
 }
 
 // Helper function to send messages only between the relevant tutor and student.
-function sendMessageToRelevantParty(int tutor_id, int student_id, string text) returns error? {
-    string connectionKey = getConnectionKey(tutor_id, student_id);
+function sendMessageToRelevantParty(int tutor_id, int student_id, string text,string role) returns error? {
+    string connectionKey = getConnectionKey(tutor_id, student_id, role);
     websocket:Caller? relevantConnection = connectionsMap[connectionKey];
 
     if relevantConnection is websocket:Caller {
@@ -219,32 +233,42 @@ function sendMessageToRelevantParty(int tutor_id, int student_id, string text) r
     return;
 }
 
-// Helper function to create a unique connection key based on the tutor and student IDs.
-function getConnectionKey(int tutor_id, int student_id) returns string {
-    return tutor_id.toString() + "_" + student_id.toString();
+function getConnectionKey(int tutor_id, int student_id, string role) returns string {
+    if role == "teacher" {
+        return "teacher_" + tutor_id.toString() + "_" + student_id.toString();
+    } else if role == "student" {
+        return "student_" + tutor_id.toString() + "_" + student_id.toString();
+    }
+    return "";
 }
 
-// Helper function to retrieve stored attribute values (tutor_id or student_id) from the WebSocket session.
+
 function getUsername(websocket:Caller caller, string key) returns string|error {
     return <string> check caller.getAttribute(key);
 }
-function sendMessageToRelevantParty2(int tutor_id, int student_id, string text) returns error? {
-    string studentConnectionKey = getConnectionKey(student_id, tutor_id); // Key for student
-    string tutorConnectionKey = getConnectionKey(tutor_id, student_id);   // Key for tutor
-
-    // Check if the student is connected
+// Send the message to the relevant student
+function sendMessageToRelevantStudent(int tutor_id, int student_id, string text, string role) returns error? {
+    string studentConnectionKey = getConnectionKey(tutor_id, student_id, role); 
     websocket:Caller? studentConnection = connectionsMap[studentConnectionKey];
+
     if studentConnection is websocket:Caller {
+        // Send the message only to the student
         check studentConnection->writeMessage(text);
     } else {
         io:println("No active connection for Student " + student_id.toString());
     }
+}
 
-    // Check if the tutor is connected
+// Send the message to the relevant teacher
+function sendMessageToRelevantTeacher(int tutor_id, int student_id, string text, string role) returns error? {
+    string tutorConnectionKey = getConnectionKey(tutor_id, student_id, role);   
     websocket:Caller? tutorConnection = connectionsMap[tutorConnectionKey];
+
     if tutorConnection is websocket:Caller {
+        // Send the message only to the tutor
         check tutorConnection->writeMessage(text);
     } else {
         io:println("No active connection for Tutor " + tutor_id.toString());
     }
 }
+
