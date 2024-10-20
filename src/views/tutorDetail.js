@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet,TouchableOpacity, Button } from 'react-native';
+import { View, Text, Image, StyleSheet,TouchableOpacity } from 'react-native';
 
 const TutorDetail = ({ route, navigation }) => {
   const { tutor } = route.params; // Get the tutor data from the route
@@ -17,9 +17,12 @@ const TutorDetail = ({ route, navigation }) => {
       <Text style={styles.subject}>Subject: {tutor.subject}</Text>
       <Text style={styles.qualifications}>Qualifications: {tutor.qualifications}</Text>
       <Text style={styles.fee}>Hourly Pay: ${tutor.hourlyPay}</Text>
-      <Text style={styles.bio}>{tutor.bio}</Text> {/* Display full description */}
+      <Text style={styles.bio}>{tutor.bio}</Text>
       
-      <Button title="SessionSelection" onPress={handleSelectSession} />
+      <TouchableOpacity style={styles.button} onPress={handleSelectSession}>
+        <Text style={styles.buttonText}>Session Selection</Text>
+      </TouchableOpacity>
+
     </View>
   )
   ;
@@ -63,6 +66,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'black',
     textAlign: 'justify',
+  },
+  button: {
+    marginTop: 20,
+    backgroundColor: 'dodgerblue',
+    paddingVertical: 10,  // Adjusts the vertical padding
+    paddingHorizontal: 20,  // Adjusts the horizontal padding for the text
+    borderRadius: 5,
+    alignSelf: 'center',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
   },
 });
 

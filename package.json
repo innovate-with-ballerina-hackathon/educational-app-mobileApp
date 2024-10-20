@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@animatereactnative/marquee": "^0.2.0",
+    "@apollo/client": "^3.11.8",
     "@expo/metro-runtime": "~3.2.3",
     "@gluestack-style/react": "^1.0.57",
     "@gluestack-ui/config": "^1.1.20",
@@ -19,6 +20,7 @@
     "@react-navigation/native-stack": "^6.11.0",
     "@react-navigation/stack": "^6.4.1",
     "@types/react": "~18.2.79",
+    "axios": "^1.7.7",
     "expo": "~51.0.28",
     "expo-auth-session": "~5.5.2",
     "expo-crypto": "~13.0.2",
