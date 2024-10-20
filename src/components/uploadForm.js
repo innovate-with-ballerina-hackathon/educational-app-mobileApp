@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet , TouchableOpacity } from 'react-native';
 import MultiSelect from 'react-native-multiple-select'; // A popular library for multiple tag selection
-
+import Icon from 'react-native-vector-icons/MaterialIcons'; // For the close icon
 const availableTags = [
     { id: '1', name: 'Math' },
     { id: '2', name: 'Science' },
@@ -43,6 +43,10 @@ const UploadForm = ({ closeModal }) => {
     return (
         <View style={styles.container}>
             <Text style={styles.heading}>Upload New File</Text>
+
+            <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
+                <Icon name="close" size={24} color="black" />
+            </TouchableOpacity>
 
             {/* Title Input */}
             <TextInput
@@ -103,6 +107,11 @@ const styles = StyleSheet.create({
     },
     fileUploadSection: {
         marginBottom: 15,
+    },
+    closeButton: {
+        position: 'absolute',
+        top: 10,
+        right: 10,
     },
 });
 
