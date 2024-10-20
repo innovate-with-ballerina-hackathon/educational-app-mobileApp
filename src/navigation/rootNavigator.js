@@ -7,14 +7,12 @@ import LoginScreen from "../views/loginScreen";
 import RoleSelectionScreen from "../views/roleSelection";
 import SubjectSelectionScreen from "../views/subjectSelection";
 import HomeScreen from "../views/homeScreen";
-import BottomTabNavigator from "./bottomTabNavigator";
 import TutorList from "../views/tutorList";
 import TutorDetail from "../views/tutorDetail";
 import SessionSelection from "../views/sessionSelection";
 import PaymentPage from "../views/paymentPage";
 import TopTabNavigator from "./topTabNavigator";
 import { ArticleDetailPage } from "../views/articleDetailPage";
-import AuthCallback from "../helpers/authCallback";
 import { UserContext } from "../../App";
 
 
@@ -38,8 +36,6 @@ export default function RootNavigator(){
                 <Stack.Screen name="SessionSelection" component={SessionSelection}/>
                 <Stack.Screen name="PaymentPage" component={PaymentPage}/>
                 <Stack.Screen name="HomeScreen" component={HomeScreen} />
-                <Stack.Screen name="AuthCallback" component={AuthCallback} />
-                {/* <Stack.Screen name="HomeScreen" component={HomeScreen} /> */}
                 <Stack.Screen name="ArticleDetail" component={ArticleDetailPage} />
             </Stack.Navigator>
         </NavigationContainer>
