@@ -1,15 +1,19 @@
+// src/Chat.js
+
 import React, { useState, useEffect, useRef } from "react";
 
-// Define the WebSocket URL
-const WEBSOCKET_URL = "ws://localhost:9090/chat/student/1/2"; 
-
-const Chat = () => {
+const Chat = ({ role, tutorId, studentId }) => {
     const [message, setMessage] = useState("");
     const [chatLog, setChatLog] = useState([]);
     const ws = useRef(null);
 
     useEffect(() => {
-        // Create WebSocket connection.
+        // Define WebSocket URL based on role and selected IDs
+        const WEBSOCKET_URL = role === "teacher" 
+            ? `ws://localhost:9090/chat/student/${tutorId}/${studentId}` 
+            : `ws://localhost:9090/chat/teacher/${studentId}/${tutorId}`;
+
+        // Create WebSocket connection
         ws.current = new WebSocket(WEBSOCKET_URL);
 
         // Connection opened
@@ -32,7 +36,7 @@ const Chat = () => {
         return () => {
             ws.current.close();
         };
-    }, []);
+    }, [role, tutorId, studentId]);
 
     const sendMessage = () => {
         if (ws.current && message.trim()) {
@@ -55,7 +59,7 @@ const Chat = () => {
 
     return (
         <div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
-            <h2>Chat with Tutor</h2>
+            <h2>Chat</h2>
             <div
                 style={{
                     border: "1px solid #ddd",

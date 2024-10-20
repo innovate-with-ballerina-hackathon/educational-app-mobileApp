@@ -13,6 +13,16 @@ string booking_status;
 int tutor_id;
 |};
 
+@http:ServiceConfig {
+    cors: {
+        allowOrigins: ["http://localhost:3000"],
+        allowCredentials: false,
+        allowHeaders: ["CORELATION_ID"],
+        exposeHeaders: ["X-CUSTOM-HEADER"],
+        maxAge: 84900
+    }
+}
+
 service /chat on new http:Listener(8090) {
     private final mysql:Client db;
     function init() returns error? {
