@@ -7,7 +7,7 @@ import LoginScreen from "../views/loginScreen";
 import RoleSelectionScreen from "../views/roleSelection";
 import SubjectSelectionScreen from "../views/subjectSelection";
 import HomeScreen from "../views/homeScreen";
-import BottomTabNavigator from "./bottomTabNavigator";
+import TopTabNavigator from "./topTabNavigator";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ArticleDetailPage } from "../views/articleDetailPage";
 
@@ -50,7 +50,7 @@ export default function RootNavigator(){
     return (
         <NavigationContainer initialState={initialState} onStateChange={saveNavigationState}>
             <Stack.Navigator initialRouteName="LoadUpScreen">
-                <Stack.Screen name="Home" component={BottomTabNavigator} options={{headerShown:false}}/>
+                <Stack.Screen name="Home" component={TopTabNavigator} options={{headerShown:false}}/>
                 <Stack.Screen name="LoadUpScreen" component={LoadUpScreen} />
                 <Stack.Screen name="LoginScreen" component={LoginScreen} />
                 <Stack.Screen name="RoleSelection" component={RoleSelectionScreen} />
