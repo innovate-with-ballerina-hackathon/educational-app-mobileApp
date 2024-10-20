@@ -61,8 +61,8 @@ const styles = StyleSheet.create({
         backgroundColor: "#f0f0f0",
         marginBottom: 10,
         borderRadius: 10,
-        height: HEIGHT * 0.4,
-        width: WIDTH * 0.5
+        height: HEIGHT * 0.5,
+
     },
     heading: {
         fontSize: 18,

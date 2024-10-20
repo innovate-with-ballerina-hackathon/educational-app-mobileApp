@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { createContext, useEffect, useState, useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from "@react-navigation/native";
@@ -8,53 +8,26 @@ import RoleSelectionScreen from "../views/roleSelection";
 import SubjectSelectionScreen from "../views/subjectSelection";
 import HomeScreen from "../views/homeScreen";
 import TopTabNavigator from "./topTabNavigator";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ArticleDetailPage } from "../views/articleDetailPage";
+import AuthCallback from "../helpers/authCallback";
+import { UserContext } from "../../App";
+
 
 const Stack = createNativeStackNavigator();
 
 export default function RootNavigator(){
     const [isLoading, setIsLoading] =  useState(true);
-    const [initialState, setInitialState] = useState();
-
-    const loadNavigationState = async () => {
-        try {
-            const savedState = await AsyncStorage.getItem('NAVIGATION_STATE');
-            if(savedState){
-                setInitialState(JSON.parse(savedState));
-                console.log(savedState);
-            }
-        } catch (e) {
-            console.log(e);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    const saveNavigationState = async (state) => {
-        try {
-            await AsyncStorage.setItem('NAVIGATION_STATE', JSON.stringify(state));
-        } catch (e) {
-            console.log(e);
-        }
-    };
-
-    useEffect(() => {
-        loadNavigationState();
-    }, []);
-
-    if (isLoading) {
-        return null;
-    }
+    const {currentTab, setCurrentTab} = useContext(UserContext);    
 
     return (
-        <NavigationContainer initialState={initialState} onStateChange={saveNavigationState}>
-            <Stack.Navigator initialRouteName="LoadUpScreen">
+        <NavigationContainer >
+            <Stack.Navigator initialRouteName="LoadUpScreen" >
                 <Stack.Screen name="Home" component={TopTabNavigator} options={{headerShown:false}}/>
                 <Stack.Screen name="LoadUpScreen" component={LoadUpScreen} />
                 <Stack.Screen name="LoginScreen" component={LoginScreen} />
                 <Stack.Screen name="RoleSelection" component={RoleSelectionScreen} />
                 <Stack.Screen name="SubjectSelection" component={SubjectSelectionScreen} />
+                <Stack.Screen name="AuthCallback" component={AuthCallback} />
                 {/* <Stack.Screen name="HomeScreen" component={HomeScreen} /> */}
                 <Stack.Screen name="ArticleDetail" component={ArticleDetailPage} />
             </Stack.Navigator>

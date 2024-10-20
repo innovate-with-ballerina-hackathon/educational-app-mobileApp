@@ -1,14 +1,11 @@
 import React, { useEffect, useContext } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { MotiText, MotiView, AnimatePresence } from 'moti';
-import { TextMarquee } from '../components/textMarquee';
+import { MotiText, MotiView } from 'moti';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { UserContext } from '../../App';
 
-
-
-const equations = ['E = mc^2', 'F = ma', 'a^2 + b^2 = c^2', 'V = IR', 'd = vt', 'pV = nRT'];
+const equations = ['E = mc²', 'F = ma', 'a² + b² = c²', 'V = IR', 'd = vt', 'pV = nRT'];
 
 const LoadUpScreen = () => {
     const navigation = useNavigation();
@@ -25,22 +22,15 @@ const LoadUpScreen = () => {
             if (role === 'tutor') {
                 setSubject(subject);
             }
-            const timeoutId = setTimeout(() => {
-                navigation.navigate('Home');
-            }, 5000);
+            setTimeout(() => navigation.navigate('Home'), 3000);
         } else {
-            const timeoutId = setTimeout(() => {
-                navigation.navigate('RoleSelection');
-            }, 5000);
-
-            return () => clearTimeout(timeoutId);
+            setTimeout(() => navigation.navigate('RoleSelection'), 3000);
         }
     };
 
     useEffect(() => {
         checkIfLoggedIn();
     }, []);
-
 
     const renderMarquee = () => {
         return equations.map((equation, index) => (
@@ -49,8 +39,11 @@ const LoadUpScreen = () => {
     };
 
     return (
-        <View style={styles.container}>
-
+        <ImageBackground 
+            source={{ uri: 'https://png.pngtree.com/thumb_back/fh260/background/20210814/pngtree-educational-mathematical-formulas-on-white-background-image_763079.jpg' }} 
+            style={styles.container} 
+            resizeMode="cover"
+        >
             <MotiView
                 from={{ opacity: 0, translateY: -50 }}
                 animate={{ opacity: 1, translateY: 0 }}
@@ -60,7 +53,7 @@ const LoadUpScreen = () => {
                 <MotiText
                     from={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 1000, duration: 2000 }}
+                    transition={{ delay: 0, duration: 1000 }}
                     style={styles.welcomeText}
                 >
                     Welcome to EduFind
@@ -69,63 +62,62 @@ const LoadUpScreen = () => {
                 <MotiText
                     from={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 3000, duration: 2000 }}
+                    transition={{ delay: 500, duration: 2000 }}
                     style={styles.subtitleText}
                 >
                     Find the best tutors for your subjects
                 </MotiText>
             </MotiView>
-
-            {/* Marquee of equations at the bottom */}
-            <View style={styles.marqueeContainerBottom}>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.marquee}>
-                    {renderMarquee()}
-                </ScrollView>
-            </View>
-        </View>
+        </ImageBackground>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFFFFF', // White background
         justifyContent: 'center',
         alignItems: 'center',
     },
-    marqueeContainer: {
-        position: 'absolute',
-        top: 50,
-        height: 50,
-        width: '100%',
-    },
     marqueeContainerBottom: {
         position: 'absolute',
-        bottom: 50,
+        bottom: 20, // Adjusted to fit better in the screen
         height: 50,
         width: '100%',
+        backgroundColor: 'rgba(255, 255, 255, 0.8)', // Slightly transparent white background
+        borderRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 10,
+        elevation: 3, // Add shadow for better visibility
     },
     marquee: {
         flexDirection: 'row',
-        paddingHorizontal: 20,
+        paddingHorizontal: 10,
     },
     equationText: {
         fontSize: 20,
         marginHorizontal: 10,
         color: '#4BA8F0', // Sky Blue
+        fontWeight: 'bold', // Bold text for emphasis
     },
     welcomeContainer: {
         justifyContent: 'center',
         alignItems: 'center',
+        padding: 20,
+        backgroundColor: 'rgba(0, 0, 0, 0.9)', // Semi-transparent background for text
+        borderRadius: 15,
+        elevation: 5, // Add shadow effect
     },
     welcomeText: {
-        fontSize: 28,
+        fontSize: 30,
         fontWeight: 'bold',
         color: '#2A7DE1', // Royal Blue
     },
     subtitleText: {
-        fontSize: 18,
-        color: '#4A4A4A', // Charcoal Gray
+        fontSize: 20,
+        color: '#FFFFFF', // Charcoal Gray
+        marginTop: 10, // Spacing between title and subtitle
+        textAlign: 'center', // Center align the subtitle
     },
 });
 

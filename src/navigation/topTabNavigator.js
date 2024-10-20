@@ -10,15 +10,15 @@ import TutorUploadsScreen from '../views/tutorViews/fileUpload';
 const Tab = createMaterialTopTabNavigator();
 
 const TopTabNavigator = () => {
-  const { role } = useContext(UserContext); // Get the user role from context
+  const { role , currentTab , setCurrentTab } = useContext(UserContext); // Get the user role from context
 
   return (
     <Tab.Navigator
-      initialRouteName="Home"
+      initialRouteName={currentTab}
       screenOptions={{
         tabBarActiveTintColor: 'blue',
         tabBarInactiveTintColor: 'gray',
-        tabBarIndicatorStyle: { backgroundColor: 'blue' },
+        tabBarIndicatorStyle: { backgroundColor: 'blue' },       
       }}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
