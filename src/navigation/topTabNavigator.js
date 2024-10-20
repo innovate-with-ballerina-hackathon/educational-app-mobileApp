@@ -3,7 +3,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { UserContext } from '../../App'; // Make sure the correct path to your UserContext is imported
 import HomeScreen from '../views/homeScreen';
 import UpcomingSessionsScreen from '../views/upcomingSession';
-import TutorsScreen from '../views/tutorScreen';
+import TutorList from '../views/tutorList';
 import ChatScreen from '../views/chatScreen';
 import TutorUploadsScreen from '../views/tutorViews/fileUpload';
 
@@ -24,7 +24,7 @@ const TopTabNavigator = () => {
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Upcoming Sessions" component={UpcomingSessionsScreen} />
       {role === 'student' && (
-        <Tab.Screen name="Tutors" component={TutorsScreen} />
+        <Tab.Screen name="Tutors" component={TutorList} />
       )}
       {role === 'tutor' && (
         <Tab.Screen name="Tutor Uploads" component={TutorUploadsScreen} />
