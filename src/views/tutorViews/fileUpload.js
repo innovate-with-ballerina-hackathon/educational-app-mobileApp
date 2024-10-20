@@ -1,19 +1,28 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Modal, StyleSheet, TextInput, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Modal, StyleSheet, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // For the floating plus icon
 import UploadForm from '../../components/uploadForm'; // Import the form component you'll create
 
 const TutorUploadsScreen = () => {
     const [modalVisible, setModalVisible] = useState(false);
+    const [uploadedFiles, setUploadedFiles] = useState([
+        { id: 1, title: 'Physics Notes', tags: ['Physics', 'Electromagnetism'], date: '2024-10-19' },
+        { id: 2, title: 'Math Worksheets', tags: ['Math', 'Algebra'], date: '2024-10-19' },
+    ]);
 
+    // Function to toggle the modal visibility
     const toggleModal = () => {
         setModalVisible(!modalVisible);
     };
 
-    const uploadedFiles = [
-        { id: 1, title: 'Physics Notes', tags: ['Physics', 'Electromagnetism'], date: '2024-01-12' },
-        { id: 2, title: 'Math Worksheets', tags: ['Math', 'Algebra'], date: '2024-02-05' },
-    ];
+    // Callback function to add new uploaded file to the list
+    const handleFileUpload = (newFile) => {
+        setUploadedFiles((prevFiles) => [
+            ...prevFiles,
+            { ...newFile, id: prevFiles.length + 1 }, // Assign a unique id to the new file
+        ]);
+        toggleModal(); // Close the modal after upload
+    };
 
     return (
         <View style={styles.container}>
@@ -44,7 +53,8 @@ const TutorUploadsScreen = () => {
             >
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
-                        <UploadForm closeModal={toggleModal} />
+                        {/* Pass handleFileUpload as a prop to the UploadForm */}
+                        <UploadForm closeModal={toggleModal} onFileUpload={handleFileUpload} />
                     </View>
                 </View>
             </Modal>

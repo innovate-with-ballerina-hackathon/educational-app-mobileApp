@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet , TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import MultiSelect from 'react-native-multiple-select'; // A popular library for multiple tag selection
 import Icon from 'react-native-vector-icons/MaterialIcons'; // For the close icon
 const availableTags = [
@@ -10,7 +10,7 @@ const availableTags = [
     { id: '5', name: 'Biology' },
 ];
 
-const UploadForm = ({ closeModal }) => {
+const UploadForm = ({ closeModal, onFileUpload }) => {
     const [title, setTitle] = useState('');
     const [selectedTags, setSelectedTags] = useState([]);
     const [file, setFile] = useState(null);
@@ -19,7 +19,7 @@ const UploadForm = ({ closeModal }) => {
         const input = document.createElement('input');
         input.type = 'file';
         input.accept = 'application/pdf';
-        
+
         input.onchange = (e) => {
             const file = e.target.files[0];
             if (file) {
@@ -27,7 +27,7 @@ const UploadForm = ({ closeModal }) => {
                 setFile(file);
             }
         };
-        
+
         input.click();
     };
 
@@ -36,6 +36,15 @@ const UploadForm = ({ closeModal }) => {
         console.log("Title:", title);
         console.log("Tags:", selectedTags);
         console.log("File:", file);
+
+        const newFile = {
+            title: title,
+            tags: selectedTags.map((tagId) => availableTags.find((tag) => tag.id === tagId).name),
+            file: file,
+            date: new Date().toISOString().split('T')[0]
+        };
+
+        onFileUpload(newFile); // Pass the new file to the parent component
 
         closeModal(); // Close modal after upload
     };
@@ -56,7 +65,6 @@ const UploadForm = ({ closeModal }) => {
                 onChangeText={setTitle}
             />
 
-            {/* Tag Selection */}
             <MultiSelect
                 items={availableTags}
                 uniqueKey="id"
@@ -64,14 +72,18 @@ const UploadForm = ({ closeModal }) => {
                 selectedItems={selectedTags}
                 selectText="Pick Tags"
                 searchInputPlaceholderText="Search Tags..."
-                tagRemoveIconColor="#CCC"
-                tagBorderColor="#CCC"
-                selectedItemTextColor="#CCC"
-                selectedItemIconColor="#CCC"
-                itemTextColor="#000"
+                tagRemoveIconColor="#FF4D4D" // Light Red for remove icon
+                tagBorderColor="#4CAF50" // Green for tag border
+                selectedItemTextColor="#007BFF" // Blue for selected item text
+                selectedItemIconColor="#4CAF50" // Green for selected item checkmark
+                itemTextColor="#333" // Dark Gray for item text
                 displayKey="name"
                 styleDropdownMenuSubsection={styles.multiSelectDropdown}
+                searchInputStyle={{ color: '#333' }} // Dark gray for the search input
+                submitButtonColor="#007BFF" // Blue for submit button
+                submitButtonText="Confirm"
             />
+
 
             {/* PDF Upload */}
             <View style={styles.fileUploadSection}>
