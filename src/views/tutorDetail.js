@@ -3,10 +3,11 @@ import { View, Text, Image, StyleSheet,TouchableOpacity } from 'react-native';
 
 const TutorDetail = ({ route, navigation }) => {
   const { tutor } = route.params; // Get the tutor data from the route
+  const tutorId = tutor.id;
 
   const handleSelectSession = () => {
     // Navigate to the Session Selection page, pass the tutor details if needed
-    navigation.navigate('SessionSelection', { tutor });
+    navigation.navigate('SessionSelection', { tutorId: tutorId });
   };
   
 

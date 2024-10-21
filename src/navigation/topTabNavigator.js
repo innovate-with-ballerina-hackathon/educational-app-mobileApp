@@ -6,6 +6,7 @@ import UpcomingSessionsScreen from '../views/upcomingSession';
 import TutorList from '../views/tutorList';
 import ChatScreen from '../views/chatScreen';
 import TutorUploadsScreen from '../views/tutorViews/fileUpload';
+import SessionSelection from '../views/sessionSelection';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -22,7 +23,12 @@ const TopTabNavigator = () => {
       }}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Upcoming Sessions" component={UpcomingSessionsScreen} />
+      {role === 'student' && (
+        <Tab.Screen name="Upcoming Sessions" component={UpcomingSessionsScreen} />
+      )}
+      {role === 'tutor' && (
+        <Tab.Screen name="Session Management" component={SessionSelection} />
+      )}
       {role === 'student' && (
         <Tab.Screen name="Tutors" component={TutorList} />
       )}

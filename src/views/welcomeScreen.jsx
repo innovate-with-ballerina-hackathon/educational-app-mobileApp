@@ -13,8 +13,7 @@ const LoadUpScreen = () => {
 
     const checkIfLoggedIn = async () => {
         const token = await AsyncStorage.getItem('accessToken');
-        // const role = await AsyncStorage.getItem('role');
-        const role = 'tutor';	
+        const role = await AsyncStorage.getItem('role');	
         const subject = await AsyncStorage.getItem('subject');
 
         if (token && role) {

@@ -1,13 +1,3 @@
-// const PaymentPage = () => {
-//     return (
-//         <div>
-//             <h1>PaymentPage</h1>
-//         </div>
-//     );
-// };
-
-// export default PaymentPage;
-
 import React, { useState } from 'react';
 import { View, Text, Button, TextInput, Alert } from 'react-native';
 import axios from 'axios';
@@ -21,6 +11,7 @@ const PaymentPage = ({ route }) => {
   // Function to handle session booking
   const handleBookSession = async () => {
     try {
+      console.log('sessionId = ', sessionId);
       // Making PUT request to book the session
       const response = await axios.put(`http://localhost:9091/users/session_booking/${sessionId}`, null, {
         params: { studentId: studentId }, // Passing studentId as a query parameter
@@ -29,7 +20,7 @@ const PaymentPage = ({ route }) => {
       // If booking is successful
       if (response.status === 200) {
         Alert.alert('Success', 'Session booked successfully!');
-        navigation.navigate('SessionSelection'); // Navigate back to SessionSelection page
+        navigation.navigate('SessionSelection', {tutorId}); // Navigate back to SessionSelection page
       }
     } catch (error) {
       console.error(error);

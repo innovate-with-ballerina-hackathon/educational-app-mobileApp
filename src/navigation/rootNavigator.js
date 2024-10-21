@@ -12,6 +12,7 @@ import TutorDetail from "../views/tutorDetail";
 import SessionSelection from "../views/sessionSelection";
 import PaymentPage from "../views/paymentPage";
 import TopTabNavigator from "./topTabNavigator";
+import SessionForm from "../views/sessionForm";
 import { ArticleDetailPage } from "../views/articleDetailPage";
 import { UserContext } from "../../App";
 
@@ -35,6 +36,7 @@ export default function RootNavigator(){
                 <Stack.Screen name="TutorDetail" component={TutorDetail}/>
                 <Stack.Screen name="SessionSelection" component={SessionSelection}/>
                 <Stack.Screen name="PaymentPage" component={PaymentPage}/>
+                <Stack.Screen name="SessionForm" component={SessionForm}/>
                 <Stack.Screen name="HomeScreen" component={HomeScreen} />
                 <Stack.Screen name="ArticleDetail" component={ArticleDetailPage} />
             </Stack.Navigator>
