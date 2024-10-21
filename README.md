@@ -1,6 +1,6 @@
-# EduFind - Personalized Educational App
+# EduApp - Personalized Educational App
 
-Welcome to **EduFind**, a personalized educational app developed by **Team Codeblast**. Our app is designed to connect students with tutors for personalized learning experiences. Whether you're a student looking for academic support or a tutor managing your sessions, EduFind has you covered.
+Welcome to **EduApp**, a personalized educational app developed by **Team Codeblast**. Our app is designed to connect students with tutors for personalized learning experiences. Whether you're a student looking for academic support or a tutor managing your sessions, EduApp has you covered.
 
 ## Features
 
