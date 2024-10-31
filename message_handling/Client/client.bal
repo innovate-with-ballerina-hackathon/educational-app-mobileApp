@@ -30,14 +30,14 @@ service /chat on new http:Listener(8090) {
         self.db = check new (host = "localhost", user = "root", password = "Asdf1234@", database = "tutoring", port = 3306);
     }
 
-    resource function get teacher/[string student_id]() returns Book[]|error {
-        stream<Book, sql:Error?> bookings =self.db->query(`SELECT * FROM tutoring.bookings WHERE student_id = ${student_id}`);
+    resource function get teacher/[string tutor_id]() returns Book[]|error {
+        stream<Book, sql:Error?> bookings =self.db->query(`SELECT * FROM tutoring.bookings WHERE tutor_id = ${tutor_id}`);
         return from Book b in bookings
             select b;
     }
 
-    resource function get student/[string tutor_id]() returns Book[]|error {
-        stream<Book, sql:Error?> bookings =self.db->query(`SELECT * FROM tutoring.bookings WHERE student_id = ${tutor_id}`);
+    resource function get student/[string student_id]() returns Book[]|error {
+        stream<Book, sql:Error?> bookings =self.db->query(`SELECT * FROM tutoring.bookings WHERE student_id = ${student_id}`);
         return from Book b in bookings
             select b;
     }
