@@ -1,19 +1,28 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity , ActivityIndicator } from 'react-native';
 import MultiSelect from 'react-native-multiple-select'; // A popular library for multiple tag selection
 import Icon from 'react-native-vector-icons/MaterialIcons'; // For the close icon
+import axios from 'axios';
+import { BACKEND_URL } from '../helpers/constants';
+
 const availableTags = [
-    { id: '1', name: 'Math' },
-    { id: '2', name: 'Science' },
-    { id: '3', name: 'Physics' },
-    { id: '4', name: 'Chemistry' },
-    { id: '5', name: 'Biology' },
+    { id: '1', name: 'ASTRO' },
+    { id: '2', name: 'PHYSICS' },
+    { id: '3', name: 'CHEMISTRY' },
+    { id: '4', name: 'GEOMETRY' },
+    { id: '5', name: 'ENGLISH' },
+    { id: '6', name: 'FRENCH' },
+    { id: '7', name: 'GERMAN' },
+    { id: '8', name: 'BIOLOGY' },
 ];
 
-const UploadForm = ({ closeModal, onFileUpload }) => {
+const UploadForm = ({ closeModal, authToken , onFileUpload }) => {
     const [title, setTitle] = useState('');
-    const [selectedTags, setSelectedTags] = useState([]);
+    const [description, setDescription] = useState('');
+    const [selectedTag, setSelectedTag] = useState([]);
     const [file, setFile] = useState(null);
+    const [loading, setLoading] = useState(false);
+
 
     const pickDocument = async () => {
         const input = document.createElement('input');
@@ -23,7 +32,6 @@ const UploadForm = ({ closeModal, onFileUpload }) => {
         input.onchange = (e) => {
             const file = e.target.files[0];
             if (file) {
-                console.log('Selected file:', file);
                 setFile(file);
             }
         };
@@ -31,22 +39,42 @@ const UploadForm = ({ closeModal, onFileUpload }) => {
         input.click();
     };
 
-    const handleUpload = () => {
-        // Your logic for uploading to FTP server
-        console.log("Title:", title);
-        console.log("Tags:", selectedTags);
-        console.log("File:", file);
+    const handleUpload = async () => {
+        if (!title || !file || !description || !selectedTag) {
+            
+            alert('Please fill all fields and select a file');
+            return;
+        }
 
-        const newFile = {
-            title: title,
-            tags: selectedTags.map((tagId) => availableTags.find((tag) => tag.id === tagId).name),
-            file: file,
-            date: new Date().toISOString().split('T')[0]
-        };
+        const selected = availableTags.find((tag) => tag.id === selectedTag[0])
+        const formData = new FormData();
+        formData.append('text_file', file);
+        formData.append('title', title);
+        formData.append('description', description);
+        formData.append('category', selected.name);	 //put date as well
 
-        onFileUpload(newFile); // Pass the new file to the parent component
+        setLoading(true);
+        
+        try{
+            const response = await axios.post(`${BACKEND_URL}/users/uploadFile`, formData, {
+                headers: {
+                    'Authorization': authToken,
+                    "Content-Type": "multipart/form-data",
+                },
+                params: {
+                    tutorId: 1, 
+                },
+            });
 
-        closeModal(); // Close modal after upload
+            onFileUpload();
+            closeModal();
+        } catch(error){
+            console.log(error);
+            alert('Error uploading file');
+        } finally {
+            setLoading(false);
+        }
+
     };
 
     return (
@@ -65,11 +93,14 @@ const UploadForm = ({ closeModal, onFileUpload }) => {
                 onChangeText={setTitle}
             />
 
+            <TextInput style={styles.input} placeholder="Enter Description" value={description} onChangeText={setDescription} />
+
             <MultiSelect
                 items={availableTags}
                 uniqueKey="id"
-                onSelectedItemsChange={setSelectedTags}
-                selectedItems={selectedTags}
+                onSelectedItemsChange={setSelectedTag}
+                selectedItems={selectedTag}
+                single={true}
                 selectText="Pick Tags"
                 searchInputPlaceholderText="Search Tags..."
                 tagRemoveIconColor="#FF4D4D" // Light Red for remove icon
@@ -93,6 +124,13 @@ const UploadForm = ({ closeModal, onFileUpload }) => {
 
             {/* Submit Button */}
             <Button title="Upload" onPress={handleUpload} />
+
+            {loading &&  (
+                <View style={styles.loadingContainer}>
+                    <ActivityIndicator size="large" color="#007BFF" />
+                    <Text style={styles.loadingText}>Uploading file...</Text>
+                </View>
+            )}
         </View>
     );
 };
@@ -124,6 +162,14 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 10,
         right: 10,
+    },
+    loadingContainer: {
+        marginTop: 20,
+        alignItems: 'center',
+    },
+    loadingText: {
+        marginTop: 10,
+        fontSize: 16,
     },
 });
 
