@@ -7,6 +7,9 @@ import TutorList from '../views/tutorList';
 import ChatScreen from '../views/chatScreen';
 import TutorUploadsScreen from '../views/tutorViews/fileUpload';
 import SessionSelection from '../views/sessionSelection';
+import ProfileTab from '../views/profileTab';
+
+const Tab = createMaterialTopTabNavigator();
 
 const TopTabNavigator = () => {
   const role = sessionStorage.getItem('role');
@@ -68,6 +71,7 @@ const TopTabNavigator = () => {
         <Route path="/tutorList" element={<TutorList />} />
         <Route path="/fileUpload" element={<TutorUploadsScreen />} />
         <Route path="/chat" element={<ChatScreen />} />
+        <Route path="/profile" element={<ProfileTab />} />
       </Routes>
     </div>
   );

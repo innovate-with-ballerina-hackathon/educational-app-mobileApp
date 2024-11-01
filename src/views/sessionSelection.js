@@ -46,7 +46,8 @@ const SessionSelection = () => {
 
   const handleSessionDelete = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:9091/users/tutor/${id}/sessions`);
+      const response = await axios.delete(`http://localhost:9091/users/session/${id}/delete`);
+
       if (response.status === 204) {
         setSessions((prevSessions) => prevSessions.filter((session) => session.sessionId !== id));
         Alert.alert('Success', 'Session deleted successfully');
