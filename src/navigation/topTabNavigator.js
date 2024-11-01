@@ -8,8 +8,7 @@ import ChatScreen from '../views/chatScreen';
 import TutorUploadsScreen from '../views/tutorViews/fileUpload';
 import SessionSelection from '../views/sessionSelection';
 import ProfileTab from '../views/profileTab';
-
-const Tab = createMaterialTopTabNavigator();
+import UpcomingSessions from '../views/upcomingSession';
 
 const TopTabNavigator = () => {
   const role = sessionStorage.getItem('role');
@@ -27,10 +26,13 @@ const TopTabNavigator = () => {
         role === 'tutor' ? navigate('/sessionSelection') : navigate('/tutorList');
         break;
       case 2:
-        role === 'tutor' && navigate('/fileUpload');
+        role === 'tutor' ? navigate('/fileUpload') : navigate('/upcomingSessions');
         break;
       case 3:
         navigate('/chat');
+        break;
+      case 4:
+        navigate('/profile');
         break;
       default:
         navigate('/home');
@@ -60,7 +62,9 @@ const TopTabNavigator = () => {
             <Tab label="Tutors" />
           )}
           {role === 'tutor' && <Tab label="Tutor Uploads" />}
+          {role === 'student' && <Tab label="Upcoming Sessions" />}
           <Tab label="Chat" />
+          <Tab label="Profile" />
         </Tabs>
       </Box>
 
@@ -72,6 +76,7 @@ const TopTabNavigator = () => {
         <Route path="/fileUpload" element={<TutorUploadsScreen />} />
         <Route path="/chat" element={<ChatScreen />} />
         <Route path="/profile" element={<ProfileTab />} />
+        <Route path='/upcomingSessions' element={<UpcomingSessions />} />
       </Routes>
     </div>
   );

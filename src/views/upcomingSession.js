@@ -97,10 +97,10 @@ import moment from 'moment';
 import { UserContext } from '../../App';
 
 const UpcomingSessions = () => {
-  const role = useContext(UserContext);
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const studentId = 1; // Replace with actual student ID
+  const studentId = sessionStorage.getItem('id');
+  const role = sessionStorage.getItem('role');
 
   useEffect(() => {
     const fetchSessions = async () => {
@@ -127,7 +127,7 @@ const UpcomingSessions = () => {
             {
               headers: {
                 userId: studentId,
-                userRole: role.role,
+                userRole: role,
               },
             }
           );
@@ -194,6 +194,8 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: '#E8F5E9',  // Light green background
+    width: '100vw',
+    height: '100vh',
   },
   title: {
     fontSize: 26,

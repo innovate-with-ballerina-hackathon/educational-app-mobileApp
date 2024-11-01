@@ -8,7 +8,7 @@ import { ArticleCard, articleList } from '../components/articleCard';
 const HomeScreen = () => {
     return (
         <ScrollView style={styles.container}>
-            {/* Top Section for Today's Schedule and Motivational Quotes / Task Section */}
+            {/* Top Section for Today's Schedule and Motivational Quotes */}
             <View style={styles.topSection}>
                 {/* Left Section */}
                 <View style={styles.leftSection}>
@@ -22,7 +22,7 @@ const HomeScreen = () => {
                 </View>
             </View>
 
-            {/* Bottom Section for Articles */}
+            {/* Today's Picks Section - now at the bottom */}
             <View style={styles.bottomSection}>
                 <Text style={styles.heading}>Today's Picks</Text>
                 <ScrollView 
@@ -53,11 +53,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#f9f9f9',
         paddingTop: 20,
         width: '100vw',
+        height: '100vh',
     },
     topSection: {
         flexDirection: 'row',
         marginBottom: 20,
         paddingHorizontal: 20,
+        flex: 2, // Allow this section to grow
     },
     leftSection: {
         flex: 1, // Takes equal space
@@ -68,11 +70,10 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
     },
     bottomSection: {
+        flex: 3, // Allow this section to grows
         marginHorizontal: 20,
-        marginBottom: 20,
     },
     articleScroll: {
-        marginTop: 10,
     },
     articleList: {
         flexDirection: 'row',

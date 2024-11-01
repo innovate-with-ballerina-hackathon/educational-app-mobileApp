@@ -5,19 +5,19 @@ import { UserContext } from '../../App';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const ProfileTab = () => {
-    const role = useContext(UserContext); 
-    const studentId = 2; 
+    const userId = sessionStorage.getItem('id'); 
     const [profileData, setProfileData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const role = sessionStorage.getItem('role');
 
-    console.log(role.role);
+    console.log(role);
 
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const endpoint = role.role === 'student'
-                    ? `http://localhost:9091/users/student/${studentId}`
-                    : `http://localhost:9091/users/tutor/${studentId}`;
+                const endpoint = role === 'student'
+                    ? `http://localhost:9091/users/student/${userId}`
+                    : `http://localhost:9091/users/tutor/${userId}`;
 
                 console.log(endpoint);
                 
@@ -92,6 +92,8 @@ const styles = StyleSheet.create({
         paddingVertical: 30,
         backgroundColor: '#f0f9ff',
         alignItems: 'center',
+        width: '100vw',
+        height: '100vh',
     },
     header: {
         marginBottom: 20,
