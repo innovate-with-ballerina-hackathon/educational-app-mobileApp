@@ -1,42 +1,75 @@
-import React, { useContext } from 'react';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { UserContext } from '../../App'; // Make sure the correct path to your UserContext is imported
+import React, { useContext, useState } from 'react';
+import { useNavigate, Routes, Route } from 'react-router-dom';
+import { Tabs, Tab, Box } from '@mui/material';
+import { UserContext } from '../../App';
 import HomeScreen from '../views/homeScreen';
-import UpcomingSessionsScreen from '../views/upcomingSession';
 import TutorList from '../views/tutorList';
 import ChatScreen from '../views/chatScreen';
 import TutorUploadsScreen from '../views/tutorViews/fileUpload';
 import SessionSelection from '../views/sessionSelection';
 
-const Tab = createMaterialTopTabNavigator();
-
 const TopTabNavigator = () => {
-  const { role , currentTab , setCurrentTab } = useContext(UserContext); // Get the user role from context
+  const role = sessionStorage.getItem('role');
+  const navigate = useNavigate();
+  const [value, setValue] = useState(0);
+
+  // Handle tab change
+  const handleTabChange = (event, newValue) => {
+    setValue(newValue);
+    switch (newValue) {
+      case 0:
+        navigate('/home');
+        break;
+      case 1:
+        role === 'tutor' ? navigate('/sessionSelection') : navigate('/tutorList');
+        break;
+      case 2:
+        role === 'tutor' && navigate('/fileUpload');
+        break;
+      case 3:
+        navigate('/chat');
+        break;
+      default:
+        navigate('/home');
+    }
+  };
 
   return (
-    <Tab.Navigator
-      initialRouteName={currentTab}
-      screenOptions={{
-        tabBarActiveTintColor: 'blue',
-        tabBarInactiveTintColor: 'gray',
-        tabBarIndicatorStyle: { backgroundColor: 'blue' },       
-      }}
-    >
-      <Tab.Screen name="Home" component={HomeScreen} />
-      {role === 'student' && (
-        <Tab.Screen name="Upcoming Sessions" component={UpcomingSessionsScreen} />
-      )}
-      {role === 'tutor' && (
-        <Tab.Screen name="Session Management" component={SessionSelection} />
-      )}
-      {role === 'student' && (
-        <Tab.Screen name="Tutors" component={TutorList} />
-      )}
-      {role === 'tutor' && (
-        <Tab.Screen name="Tutor Uploads" component={TutorUploadsScreen} />
-      )}
-      <Tab.Screen name="Chat" component={ChatScreen} />
-    </Tab.Navigator>
+    <div>
+      <Box sx={{ bgcolor: 'background.paper' }}>
+        <Tabs
+          value={value}
+          onChange={handleTabChange}
+          aria-label="top navigation tabs"
+          centered
+          sx={{
+            width: '100%', // Full width
+            overflow: 'visible', // Prevent overflow
+            '& .MuiTabs-indicator': {
+              backgroundColor: 'blue', // Custom indicator color
+            },
+          }}
+        >
+          <Tab label="Home" />
+          {role === 'tutor' ? (
+            <Tab label="Session Management" />
+          ) : (
+            <Tab label="Tutors" />
+          )}
+          {role === 'tutor' && <Tab label="Tutor Uploads" />}
+          <Tab label="Chat" />
+        </Tabs>
+      </Box>
+
+      {/* Define Routes for each component */}
+      <Routes>
+        <Route path="/home" element={<HomeScreen />} />
+        <Route path="/sessionSelection" element={<SessionSelection />} />
+        <Route path="/tutorList" element={<TutorList />} />
+        <Route path="/fileUpload" element={<TutorUploadsScreen />} />
+        <Route path="/chat" element={<ChatScreen />} />
+      </Routes>
+    </div>
   );
 };
 
