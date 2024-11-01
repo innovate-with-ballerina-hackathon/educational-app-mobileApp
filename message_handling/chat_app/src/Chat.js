@@ -9,9 +9,16 @@ const Chat = ({ role, tutorId, studentId }) => {
 
     useEffect(() => {
         // Define WebSocket URL based on role and selected IDs
-        const WEBSOCKET_URL = role === "teacher" 
-            ? `ws://localhost:9090/chat/teacher/${tutorId}/${studentId}` 
-            : `ws://localhost:9090/chat/student/${studentId}/${tutorId}`;
+        const WEBSOCKET_URL = role === "tutor" 
+            ? `ws://localhost:9096/chat/tutor/${tutorId}/${studentId}` 
+            : `ws://localhost:9096/chat/student/${tutorId}/${studentId}`;
+        console.log("Role:", role);
+        console.log("Tutor ID:", tutorId);
+        console.log("Student ID:", studentId);
+
+        // const WEBSOCKET_URL = role === "tutor" 
+        //     ? `ws://localhost:9096/chat/tutor/2/1` 
+        //     : `ws://localhost:9096/chat/student/1/2`;
 
         // Create WebSocket connection
         ws.current = new WebSocket(WEBSOCKET_URL);
