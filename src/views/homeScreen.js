@@ -4,8 +4,10 @@ import TodaySchedule from '../components/todaySchedule';
 import TaskSection from '../components/taskSection';
 import MotivationalQuote from '../components/motivationalQuote';
 import { ArticleCard, articleList } from '../components/articleCard';
+import Work from '../components/work';
 
 const HomeScreen = () => {
+    const role = sessionStorage.getItem('role');
     return (
         <ScrollView style={styles.container}>
             {/* Top Section for Today's Schedule and Motivational Quotes */}
@@ -18,7 +20,7 @@ const HomeScreen = () => {
                 {/* Right Section for Quote and Task */}
                 <View style={styles.rightSection}>
                     <MotivationalQuote />
-                    <TaskSection />
+                    {role === 'tutor' ? <Work/> : <TaskSection />}
                 </View>
             </View>
 
@@ -59,7 +61,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginBottom: 20,
         paddingHorizontal: 20,
-        flex: 2, // Allow this section to grow
+        flex: 1, // Allow this section to grow
     },
     leftSection: {
         flex: 1, // Takes equal space
@@ -70,8 +72,9 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
     },
     bottomSection: {
-        flex: 3, // Allow this section to grows
+        flex: 1, // Allow this section to grows
         marginHorizontal: 20,
+        marginTop: 20,
     },
     articleScroll: {
     },

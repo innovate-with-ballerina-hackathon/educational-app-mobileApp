@@ -131,7 +131,7 @@ const TaskSection = () => {
             return;
         }
 
-        const studentId = 2; // Replace with actual student ID
+        const studentId = sessionStorage.getItem('id');
 
         try {
             const response = await axios.put(
