@@ -16,6 +16,7 @@ const TutorList = () => {
 
   // print Role
   console.log(role.role);
+  
   const fetchTutors = async () => {
     try {
       const response = await fetch('http://localhost:9090', {
@@ -106,18 +107,19 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       padding: 20,
-      backgroundColor: '#f5f5f5',
+      backgroundColor: '#e0f7fa', // Light blue background
     },
     searchBar: {
       height: 40,
-      borderColor: '#ccc',
+      borderColor: '#4caf50', // Green border
       borderWidth: 1,
       borderRadius: 5,
       paddingLeft: 10,
       marginBottom: 20,
+      backgroundColor: '#ffffff', // White background for search bar
     },
     card: {
-      backgroundColor: '#fff',
+      backgroundColor: '#ffffff',
       padding: 20,
       marginBottom: 10,
       borderRadius: 10,
@@ -127,12 +129,17 @@ const styles = StyleSheet.create({
       shadowRadius: 5,
       elevation: 2,
       flexDirection: 'row',
+      borderLeftWidth: 5, // Colorful border
+      borderLeftColor: '#4caf50', // Green border
+      alignItems: 'center', // Center image and text vertically
     },
     image: {
       width: 80,
       height: 80,
       borderRadius: 40,
       marginRight: 15,
+      borderColor: '#4caf50', // Green border around the image
+      borderWidth: 2,
     },
     detailsContainer: {
       flex: 1,
@@ -140,19 +147,21 @@ const styles = StyleSheet.create({
     name: {
       fontSize: 18,
       fontWeight: 'bold',
+      color: '#00796b', // Teal color for name
     },
     subject: {
       fontSize: 16,
       marginVertical: 5,
+      color: '#004d40', // Darker teal for subject
     },
     fee: {
       fontSize: 16,
-      color: 'green',
+      color: '#ff9800', // Orange color for fee
     },
     qualifications: {
       fontSize: 14,
-      color: 'gray',
+      color: '#757575', // Gray color for qualifications
     },
-  });
+});
 
 export default TutorList;

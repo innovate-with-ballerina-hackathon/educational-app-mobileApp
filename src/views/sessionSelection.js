@@ -71,7 +71,7 @@ const SessionSelection = ({ navigation, route }) => {
     // Handle session deletion (for tutors only)
   const handleSessionDelete = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:9091/users/tutor/${id}/sessions`);
+      const response = await axios.delete(`http://localhost:9091/users/session/${id}/delete`);
 
       if (response.status === 204) {
         // Remove deleted session from local state

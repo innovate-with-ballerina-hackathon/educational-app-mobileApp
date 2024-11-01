@@ -7,6 +7,7 @@ import TutorList from '../views/tutorList';
 import ChatScreen from '../views/chatScreen';
 import TutorUploadsScreen from '../views/tutorViews/fileUpload';
 import SessionSelection from '../views/sessionSelection';
+import ProfileTab from '../views/profileTab';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -36,6 +37,7 @@ const TopTabNavigator = () => {
         <Tab.Screen name="Tutor Uploads" component={TutorUploadsScreen} />
       )}
       <Tab.Screen name="Chat" component={ChatScreen} />
+      <Tab.Screen name="Profile" component={ProfileTab} />
     </Tab.Navigator>
   );
 };
