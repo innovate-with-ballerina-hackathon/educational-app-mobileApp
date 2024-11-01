@@ -5,6 +5,9 @@
 
 /* App.css */
 
+.newline-text {
+  white-space: pre-line;
+}
 
 .chat-window {
   flex: 2;

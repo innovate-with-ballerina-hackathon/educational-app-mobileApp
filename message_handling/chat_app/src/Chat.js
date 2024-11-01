@@ -1,6 +1,5 @@
-// src/Chat.js
-
 import React, { useState, useEffect, useRef } from "react";
+import "./Chat.css";
 
 const Chat = ({ role, tutorId, studentId }) => {
     const [message, setMessage] = useState("");
@@ -8,38 +7,25 @@ const Chat = ({ role, tutorId, studentId }) => {
     const ws = useRef(null);
 
     useEffect(() => {
-        // Define WebSocket URL based on role and selected IDs
         const WEBSOCKET_URL = role === "tutor" 
             ? `ws://localhost:9096/chat/tutor/${tutorId}/${studentId}` 
             : `ws://localhost:9096/chat/student/${tutorId}/${studentId}`;
-        console.log("Role:", role);
-        console.log("Tutor ID:", tutorId);
-        console.log("Student ID:", studentId);
 
-        // const WEBSOCKET_URL = role === "tutor" 
-        //     ? `ws://localhost:9096/chat/tutor/2/1` 
-        //     : `ws://localhost:9096/chat/student/1/2`;
-
-        // Create WebSocket connection
         ws.current = new WebSocket(WEBSOCKET_URL);
 
-        // Connection opened
         ws.current.onopen = () => {
             console.log("Connected to the WebSocket server");
         };
 
-        // Listen for messages
         ws.current.onmessage = (event) => {
             console.log("Message from server ", event.data);
             setChatLog((prev) => [...prev, event.data]);
         };
 
-        // Handle WebSocket closing
         ws.current.onclose = () => {
             console.log("WebSocket connection closed");
         };
 
-        // Cleanup on component unmount
         return () => {
             ws.current.close();
         };
@@ -47,13 +33,22 @@ const Chat = ({ role, tutorId, studentId }) => {
 
     const sendMessage = () => {
         if (ws.current && message.trim()) {
-            // Send message to the server
+            const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            // Format the message with role, dash, time, and message content
+            const formattedMessage = `${role} - ${currentTime}\n${message}`;
+            
+            // Send only the main message content to the server
             ws.current.send(message);
-            setChatLog((prev) => [...prev, "You: " + message]);
-            setMessage(""); // Clear the input field
+    
+            // Update the chat log with the formatted message
+            setChatLog((prev) => [...prev, formattedMessage]);
+    
+            // Clear the input field
+            setMessage("");
         }
     };
-
+    
     const handleInputChange = (e) => {
         setMessage(e.target.value);
     };
@@ -64,35 +59,46 @@ const Chat = ({ role, tutorId, studentId }) => {
         }
     };
 
+   
     return (
         <div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
-            <h2>Chat</h2>
-            <div
-                style={{
-                    border: "1px solid #ddd",
-                    padding: "10px",
-                    height: "300px",
-                    overflowY: "auto",
-                    marginBottom: "20px",
-                }}
-            >
-                {chatLog.map((msg, index) => (
-                    <div key={index}>{msg}</div>
-                ))}
-            </div>
-            <input
-                type="text"
-                value={message}
-                onChange={handleInputChange}
-                onKeyPress={handleKeyPress}
-                placeholder="Type your message..."
-                style={{ width: "80%", padding: "10px", marginRight: "10px" }}
-            />
-            <button onClick={sendMessage} style={{ padding: "10px 20px" }}>
-                Send
-            </button>
-        </div>
+    <h2>Chat</h2>
+    <div className="chat-log-container" style={{ border: "1px solid #ddd", padding: "10px", height: "300px", overflowY: "auto", marginBottom: "20px", whiteSpace: "pre-line" }}>
+        {chatLog.map((msg, index) => {
+            // Split the message into lines
+            const lines = msg.split("\n");
+
+            return lines.map((line, lineIndex) => {
+                // Check if the line starts with "student - " to apply bold styling
+                if (line.startsWith("student - ")) {
+                    return (
+                        <div key={`${index}-${lineIndex}`}>
+                            <strong>{line}</strong>
+                        </div>
+                    );
+                } else {
+                    return <div key={`${index}-${lineIndex}`}>{line}</div>;
+                }
+            });
+        })}
+    </div>
+    <input
+        type="text"
+        value={message}
+        onChange={handleInputChange}
+        onKeyPress={handleKeyPress}
+        placeholder="Type your message..."
+        style={{ width: "80%", padding: "10px", marginRight: "10px" }}
+    />
+    <button onClick={sendMessage} style={{ padding: "10px 20px" }}>
+        Send
+    </button>
+</div>
+
     );
+
+
+    
 };
 
 export default Chat;

@@ -1,0 +1,10 @@
+/* Chat.css */
+
+.chat-log-container {
+    border: 1px solid #ddd;
+    padding: 10px;
+    height: 300px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    white-space: pre-line; /* This will render \n as line breaks */
+}
