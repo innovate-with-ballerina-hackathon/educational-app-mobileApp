@@ -1,24 +1,78 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { Text, ScrollView, View, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons"; // Importing Material Icons
 import { HEIGHT, WIDTH } from "../helpers/constants";
-
-const todaySessions = [
-    { id: 1, tutorName: "Tutor 1", subject: "Maths", time: "10:00 AM", duration: "1 hour" },
-    { id: 2, tutorName: "Tutor 2", subject: "Physics", time: "11:00 AM", duration: "1 hour" },
-    { id: 3, tutorName: "Tutor 3", subject: "Chemistry", time: "12:00 PM", duration: "1 hour" },
-    { id: 4, tutorName: "Tutor 4", subject: "Biology", time: "01:00 PM", duration: "1 hour" },
-    { id: 5, tutorName: "Tutor 5", subject: "Maths", time: "02:00 PM", duration: "1 hour" },
-];
+import axios from 'axios';
+import { BACKEND_URL } from "../helpers/constants";
 
 const subjectIcons = {
     Maths: "calculate",
     Physics: "hub",
-    Chemistry: "science",  // You can use another icon if needed
+    Chemistry: "science",  
     Biology: "biotech",
 };
 
 const TodaySchedule = () => {
+    const [todaySessions, setTodaySessions] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const tutor_id = 1; // Replace with the actual tutor id
+
+    useEffect(() => {
+        const fetchSessions = async () => {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = today.getMonth() + 1;  // Month is 0-indexed
+            const day = today.getDate();
+
+            try {
+                const response = await axios.get(`${BACKEND_URL}/users/tutor/${tutor_id}/booked`,
+                    {
+                        params: {
+                            year: year,
+                            month: month,
+                            day: day,
+                        }
+                    });
+                const sessions = response.data;
+                const formattedSessions = sessions.map((session) => {
+                    const startingTime = new Date(
+                        session.startingTime.year,
+                        session.startingTime.month - 1, // month is 0-indexed
+                        session.startingTime.day,
+                        session.startingTime.hour,
+                        session.startingTime.minute
+                    )
+                    const endingTime = new Date(
+                        session.endingTime.year,
+                        session.endingTime.month - 1, // month is 0-indexed
+                        session.endingTime.day,
+                        session.endingTime.hour,
+                        session.endingTime.minute
+                    )
+
+                    const duration = Math.ceil((endingTime - startingTime) / (60000 * 60));  // Convert milliseconds to minutes
+
+                    return {
+                        id: session.sessionId,
+                        time: startingTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                        duration: `${duration} hour${duration > 1 ? 's' : ''}`,
+                    };
+                });
+
+                setTodaySessions(formattedSessions);
+
+            } catch (error) {
+                console.error('Error fetching sessions:', error);
+                alert('An error occurred. Please try again later.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchSessions();
+    }, []);
+        
+
     return (
         <View style={styles.sessionBox}>
             <Text style={styles.heading}>Today's Sessions</Text>
@@ -35,8 +89,8 @@ const TodaySchedule = () => {
                                     style={styles.iconStyle}
                                 />
                                 <View>
-                                    <Text style={styles.tutorText}>{session.tutorName}</Text>
-                                    <Text style={styles.infoText}>{session.subject}</Text>
+                                    <Text style={styles.tutorText}>Session Id</Text>
+                                    <Text style={styles.infoText}>{session.id}</Text>
                                 </View>
                             </View>
 
