@@ -13,7 +13,6 @@
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@expo/metro-runtime": "~3.2.3",
-    "@gluestack-ui/themed": "^1.1.54",
     "@mui/icons-material": "^6.1.4",
     "@mui/material": "^6.1.4",
     "@react-native-async-storage/async-storage": "1.23.1",
@@ -33,7 +32,6 @@
     "gapi-script": "^1.2.0",
     "moti": "^0.29.0",
     "react": "^18.2.0",
-    "react-google-login": "^5.2.2",
     "react-native": "0.74.5",
     "react-native-calendars": "^1.1307.0",
     "react-native-multiple-select": "^0.5.12",
@@ -45,7 +43,8 @@
     "react-native-vector-icons": "^10.2.0",
     "react-native-web": "~0.19.10",
     "react-router-dom": "^6.27.0",
-    "typescript": "~5.3.3"
+    "typescript": "~5.3.3",
+    "react-dom": "18.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
