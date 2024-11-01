@@ -10,7 +10,8 @@ const ProfileTab = () => {
     const [loading, setLoading] = useState(true);
     const role = sessionStorage.getItem('role');
 
-    console.log(role);
+    console.log(profileData);
+
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -66,13 +67,13 @@ const ProfileTab = () => {
                     <>
                         <Text style={styles.label}>Subject ID:</Text>
                         <Text style={styles.value}>{profileData.subjectSubjectId}</Text>
-                        {profileData.experienceYears && (
+                        {profileData.experienceYears!=null && (
                             <>
                                 <Text style={styles.label}>Experience:</Text>
                                 <Text style={styles.value}>{profileData.experienceYears} years</Text>
                             </>
                         )}
-                        {profileData.price && (
+                        {profileData.price!= null && (
                             <>
                                 <Text style={styles.label}>Price:</Text>
                                 <Text style={styles.value}>${profileData.price}</Text>
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
         color: 'black',
     },
     card: {
-        width: '100%',
+        width: '80%',
         padding: 20,
         borderRadius: 20,
         backgroundColor: '#ffffff',

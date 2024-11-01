@@ -1,0 +1,37 @@
+.chat-screen {
+    display: flex;
+    justify-content: center;
+    align-items: stretch; /* Ensures both columns stretch equally */
+    height: 100vh; /* Full viewport height */
+    background-color: #f4f4f4; /* Background color */
+    width: 100vw;
+    margin: 0; /* Reset any default margin */
+    padding: 20px; /* Add padding to create space around the content */
+    box-sizing: border-box; /* Include padding in the element's total width and height */
+}
+
+.chat-container {
+    display: flex;
+    width: 100%; /* Ensure it uses full width */
+    max-width: 1200px; /* Optional: set a maximum width for larger screens */
+    margin: 0 auto; /* Center the container */
+}
+
+.chat-list {
+    flex: 1; /* Fixed width for chat list, adjust as needed */
+    padding: 20px;
+    background-color: #fff;
+    border-right: 1px solid #ddd; /* Divider between chat list and chat area */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    height: calc(100vh - 40px); /* Adjust for top and bottom margins */
+    overflow-y: auto; /* Enable scrolling if content overflows */
+}
+
+.chat {
+    flex: 2; /* Takes the remaining space, adjust as needed */
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    height: calc(100vh - 40px); /* Adjust for top and bottom margins */
+    overflow-y: auto; /* Enable scrolling if content overflows */
+}
