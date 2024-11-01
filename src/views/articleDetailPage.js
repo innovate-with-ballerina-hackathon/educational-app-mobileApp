@@ -1,59 +1,56 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { WIDTH } from "../helpers/constants";
 import { articleList } from "../components/articleCard";
-import { Box, Heading, Image, Text } from "@gluestack-ui/themed";
+import { Box, Typography, CardMedia } from "@mui/material";
 import { UserContext } from "../../App";
+import { useParams } from "react-router-dom";
 
-
-export const ArticleDetailPage = ({ route}) => {
-    const [articleId, setArticleId] = useState();
-    const [article, setArticle ] = useState();
-    const {role, subject} = useContext(UserContext);
-    console.log('>>>>>>>>>>'+ role + subject);
-    const ref = useRef();
-    const width = WIDTH;
-    useEffect(()=> {
-        if(route.params?.id){
-            setArticleId(route.params.id);
-        }
-    }, []);
-
-    useEffect(()=> { 
-        setArticle(articleList.find((o) => o.id === articleId));
-    }, [articleId]);
+export const ArticleDetailPage = () => {
+    const [article, setArticle] = useState();
+    const { role, subject } = useContext(UserContext);
+    const { id } = useParams();
+    
+    useEffect(() => { 
+        setArticle(articleList.find((o) => o.id === parseInt(id)));
+    }, [id]);
 
     return (
         <Box
-            width={width}
-            height={width}
+            width='100vw'
+            height='100vh'
             display="flex"
             justifyContent="center"
             alignItems="center"
             flexDirection="column"
-            m="$3"
+            m={3} // Material-UI spacing system
+            sx={{ bgcolor: '#f5f5f5', borderRadius: '8px', boxShadow: 2 }} // Background and shadow for aesthetic appeal
         >
-            <Heading>{article?.title}</Heading>
+            <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', mb: 1 }}> {/* Reduced bottom margin */}
+                {article?.title}
+            </Typography>
             <Box
-                width={width * 0.8}
-                height={width * 0.8}
+                width={WIDTH > 600 ? WIDTH * 0.6 : WIDTH * 0.9} // Responsive width
                 display="flex"
-                justifyContent="center"
-                alignItems="center"
                 flexDirection="column"
-                m="$3"
+                alignItems="center"
+                m={3}
             >
-                <Image
+                <CardMedia
+                    component="img"
                     alt="article image"
-                    source={{ uri: article?.imageUrl ?? "https://tse2.mm.bing.net/th?id=OIP.Hxm4Wr6uccQwifp7HH7uYQHaE8&pid=Api&P=0&h=220"}}
-                    style={{
-                            width: WIDTH , // Adjust the width
-                            height: WIDTH * 0.3, // Adjust the height
-                        }}
-                    opacity={0.8}
+                    image={article?.imageUrl ?? "https://tse2.mm.bing.net/th?id=OIP.Hxm4Wr6uccQwifp7HH7uYQHaE8&pid=Api&P=0&h=220"}
+                    sx={{
+                        width: '100%', // Use full width of the container
+                        maxHeight: '300px', // Limit max height for aesthetics
+                        objectFit: 'cover', // Keep aspect ratio
+                        borderRadius: '8px',
+                        mb: 2 // Margin below the image
+                    }}
                 />
-                <Text>{article?.content}</Text>
+                <Typography variant="body1" sx={{ textAlign: 'justify', lineHeight: 1.6 }}>
+                    {article?.content}
+                </Typography>
             </Box>
         </Box>
-        
     );
-}
+};

@@ -15,7 +15,7 @@ const subjectIcons = {
 const TodaySchedule = () => {
     const [todaySessions, setTodaySessions] = useState([]);
     const [loading, setLoading] = useState(true);
-    const tutor_id = 1; // Replace with the actual tutor id
+    const tutor_id = sessionStorage.getItem('id');
 
     useEffect(() => {
         const fetchSessions = async () => {

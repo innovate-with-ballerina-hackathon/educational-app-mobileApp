@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, Picker, StyleSheet, ScrollView } from 'react-native';
 import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 
-const SessionForm = ({ route, navigation }) => {
-  const { tutorId, selectedDate } = route.params; // Extracting tutorId and selectedDate from route params
+const SessionForm = () => {
+  // const { tutorId, selectedDate } = route.params; // Extracting tutorId and selectedDate from route params
+  const location = useLocation();
+  const { tutorId, selectedDate } = location.state;
 
   // Split selectedDate into year, month, and day
   const [year, month, day] = selectedDate.split('-').map(Number);
@@ -56,7 +59,7 @@ const SessionForm = ({ route, navigation }) => {
   // Submit the form
   const handleSubmit = async () => {
     const sessionData = {
-      tutorTutorId: tutorId,
+      tutorTutorId: parseInt(tutorId, 10),
       startingTime: {
         ...startingTime,
         second: 50,
@@ -69,6 +72,7 @@ const SessionForm = ({ route, navigation }) => {
       },
       status: 'SCHEDULED',
       eventId: '',
+      eventUrl: '',
       timeZoneOffset: timeZoneOffset,
       utcOffset: utcOffset,
     };
@@ -93,7 +97,7 @@ const SessionForm = ({ route, navigation }) => {
 
       <Text style={styles.label}>Starting Time:</Text>
       <Text style={styles.dateText}>
-        {`${startingTime.year}-${String(startingTime.month).padStart(2, '0')}-${String(startingTime.day).padStart(2, '0')}`}
+        {`${startingTime.year}-${String(startingTime.month).padStart(2, '0')}-${String(startingTime.day).padStart(2, '0')} ${String(startingTime.hour).padStart(2, '0')}:${String(startingTime.minute).padStart(2, '0')}`}
       </Text>
       <View style={styles.inputRow}>
         <TextInput
@@ -114,7 +118,7 @@ const SessionForm = ({ route, navigation }) => {
 
       <Text style={styles.label}>Ending Time:</Text>
       <Text style={styles.dateText}>
-        {`${endingTime.year}-${String(endingTime.month).padStart(2, '0')}-${String(endingTime.day).padStart(2, '0')}`}
+        {`${endingTime.year}-${String(endingTime.month).padStart(2, '0')}-${String(endingTime.day).padStart(2, '0')} ${String(endingTime.hour).padStart(2, '0')}:${String(endingTime.minute).padStart(2, '0')}`}
       </Text>
       <View style={styles.inputRow}>
         <TextInput
@@ -154,6 +158,8 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: '#F9F9F9',
+    width: '100vw',
+    height: '100vh',
   },
   title: {
     fontSize: 24,
@@ -188,6 +194,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginTop: 20,
   },
 });
 

@@ -10,7 +10,8 @@ const TutorUploadsScreen = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [uploadedFiles, setUploadedFiles] = useState([]);
     const [loading, setLoading] = useState(true);
-    const tutor_id = 1; // Replace with the actual tutor id
+    const tutor_id = sessionStorage.getItem('id');
+    console.log(">>>tutor_id", tutor_id);
 
     // Function to toggle the modal visibility
     const toggleModal = () => {
@@ -79,6 +80,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
+        width: '100vw',
+        height: '95vh',
     },
     heading: {
         fontSize: 22,
@@ -90,6 +93,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#f9f9f9',
         marginBottom: 10,
         borderRadius: 8,
+        width: '50%',
+        alignSelf: 'center'
     },
     fileTitle: {
         fontSize: 18,

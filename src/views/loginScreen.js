@@ -38,18 +38,18 @@ const LoginScreen = () => {
   });
 
 
-  const checkIfLoggedIn = async () => {
-    const token = await AsyncStorage.getItem('accessToken');
-    console.log('>>>>>token',token);
-    if(token){
-      setAccessToken(token);
-      navigation.navigate('Home');
-    }
-  };
+  // const checkIfLoggedIn = async () => {
+  //   const token = await AsyncStorage.getItem('accessToken');
+  //   console.log('>>>>>token',token);
+  //   if(token){
+  //     setAccessToken(token);
+  //     navigation.navigate('Home');
+  //   }
+  // };
 
-  useEffect(() => {
-    checkIfLoggedIn();
-  }, []);
+  // useEffect(() => {
+  //   checkIfLoggedIn();
+  // }, []);
 
   useEffect(() => {
     if (response?.type === 'success') {

@@ -1,13 +1,18 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet,TouchableOpacity } from 'react-native';
+import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-const TutorDetail = ({ route, navigation }) => {
-  const { tutor } = route.params; // Get the tutor data from the route
+const TutorDetail = () => {
+  // const { tutor } = route.params; // Get the tutor data from the route
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { tutor } = location.state;
   const tutorId = tutor.id;
 
   const handleSelectSession = () => {
     // Navigate to the Session Selection page, pass the tutor details if needed
-    navigation.navigate('SessionSelection', { tutorId: tutorId });
+    navigate('/sessionSelection', {state: { tutorId: tutorId }});
   };
   
 
@@ -34,6 +39,8 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: '#f5f5f5',
+    width: '100vw',
+    height: '100vh',
   },
   image: {
     width: 150,

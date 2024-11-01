@@ -1,43 +1,28 @@
 import React, { useEffect, useContext } from 'react';
 import { View, Text, StyleSheet, ScrollView, ImageBackground } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { MotiText, MotiView } from 'moti';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { UserContext } from '../../App';
-
-const equations = ['E = mc²', 'F = ma', 'a² + b² = c²', 'V = IR', 'd = vt', 'pV = nRT'];
+import { useNavigate } from 'react-router-dom';
 
 const LoadUpScreen = () => {
-    const navigation = useNavigation();
-    const { setAccessToken, setRole, setSubject } = useContext(UserContext);
 
-    const checkIfLoggedIn = async () => {
-        const token = await AsyncStorage.getItem('accessToken');
-        const role = await AsyncStorage.getItem('role');	
-        const subject = await AsyncStorage.getItem('subject');
-
-        if (token && role) {
-            setAccessToken(token);
-            setRole(role);
-            if (role === 'tutor') {
-                setSubject(subject);
-            }
-            setTimeout(() => navigation.navigate('Home'), 3000);
-        } else {
-            setTimeout(() => navigation.navigate('RoleSelection'), 3000);
-        }
-    };
+    const {isLoggedIn } = useContext(UserContext);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        checkIfLoggedIn();
-    }, []);
+        const timer = setTimeout(() => {
+            if(isLoggedIn){
+                navigate('/home');
+            }else{
+                navigate('/roleSelection');
+            }
+        }, 3000);
 
-    const renderMarquee = () => {
-        return equations.map((equation, index) => (
-            <Text key={index} style={styles.equationText}>{equation}</Text>
-        ));
-    };
+        return () => clearTimeout(timer);
+    }, [isLoggedIn, navigate]);
 
+    
     return (
         <ImageBackground 
             source={{ uri: 'https://png.pngtree.com/thumb_back/fh260/background/20210814/pngtree-educational-mathematical-formulas-on-white-background-image_763079.jpg' }} 
@@ -56,7 +41,7 @@ const LoadUpScreen = () => {
                     transition={{ delay: 0, duration: 1000 }}
                     style={styles.welcomeText}
                 >
-                    Welcome to EduFind
+                    Welcome to EduApp
                 </MotiText>
 
                 <MotiText
@@ -77,6 +62,8 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        width: '100vw', // Full width
+        height: '100vh', // Full height
     },
     marqueeContainerBottom: {
         position: 'absolute',

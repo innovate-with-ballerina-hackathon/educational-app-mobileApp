@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, FlatList, TextInput, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { UserContext } from '../../App';
+import { useNavigate } from 'react-router-dom';
 
 const TutorList = () => {  
-  const role = useContext(UserContext);
-  const navigation = useNavigation();
+  const role = sessionStorage.getItem('role');
+  const id = sessionStorage.getItem('id');
+  const navigate = useNavigate();
+
   const [tutors, setTutors] = useState([]);
   const [filteredTutors, setFilteredTutors] = useState([]);
   const [search, setSearch] = useState('');
@@ -15,15 +17,15 @@ const TutorList = () => {
   }, []);
 
   // print Role
-  console.log(role.role);
+  console.log(role);
   const fetchTutors = async () => {
     try {
       const response = await fetch('http://localhost:9090', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'userId': 1,
-          'userRole': role.role,
+          'userId': id,
+          'userRole': role,
         },
         body: JSON.stringify({
           query: `
@@ -88,7 +90,7 @@ const TutorList = () => {
               style={styles.image} 
             />
             <View style={styles.detailsContainer}>
-              <TouchableOpacity onPress={() => navigation.navigate('TutorDetail', { tutor: item })}>
+              <TouchableOpacity onPress={() => navigate('/tutorDetail', { state: {tutor: item} })}>
                 <Text style={styles.name}>{item.name}</Text>
               </TouchableOpacity>
               <Text style={styles.subject}>Subject: {item.subject}</Text>
@@ -107,6 +109,8 @@ const styles = StyleSheet.create({
       flex: 1,
       padding: 20,
       backgroundColor: '#f5f5f5',
+      width: '100vw',
+      height: '100vh',
     },
     searchBar: {
       height: 40,

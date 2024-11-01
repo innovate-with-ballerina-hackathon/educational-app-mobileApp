@@ -1,17 +1,18 @@
 import React, { useContext } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { UserContext } from '../../App';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigate } from 'react-router-dom';
 
 const SubjectSelectionScreen = () => {
-  const navigation = useNavigation();
   const { setSubject } = useContext(UserContext);
+  const navigate = useNavigate();
 
   const handleSubjectSelection = (subject) => {
     setSubject(subject);
     AsyncStorage.setItem('subject', subject);
-    navigation.navigate('LoginScreen');
+    sessionStorage.setItem('subject', subject);
+    navigate('/signin');
   };
 
   return (
@@ -39,6 +40,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#f0f4f8', // Light background color for consistency
+    width: '100vw', // Full width
+    height: '100vh', // Full height
   },
   title: {
     fontSize: 24,

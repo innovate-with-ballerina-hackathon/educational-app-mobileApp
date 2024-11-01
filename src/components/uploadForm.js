@@ -14,6 +14,7 @@ const availableTags = [
     { id: '6', name: 'FRENCH' },
     { id: '7', name: 'GERMAN' },
     { id: '8', name: 'BIOLOGY' },
+    {id : '9', name: 'MATHS'},
 ];
 
 const UploadForm = ({ closeModal, authToken , onFileUpload }) => {
@@ -22,6 +23,9 @@ const UploadForm = ({ closeModal, authToken , onFileUpload }) => {
     const [selectedTag, setSelectedTag] = useState([]);
     const [file, setFile] = useState(null);
     const [loading, setLoading] = useState(false);
+    const tutor_id = sessionStorage.getItem('id');
+
+    console.log(">>>id", tutor_id);
 
 
     const pickDocument = async () => {
@@ -62,7 +66,7 @@ const UploadForm = ({ closeModal, authToken , onFileUpload }) => {
                     "Content-Type": "multipart/form-data",
                 },
                 params: {
-                    tutorId: 1, 
+                    tutorId: tutor_id, 
                 },
             });
 

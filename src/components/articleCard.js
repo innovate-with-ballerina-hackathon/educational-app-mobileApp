@@ -1,7 +1,6 @@
 import React from 'react';
 import { Card, CardMedia, CardContent, Typography, Box } from '@mui/material';
-// import { useNavigate } from 'react-router-dom';
-import { useNavigation } from "@react-navigation/native";
+import { useNavigate } from 'react-router-dom';
 
 export const articleList = [
     {
@@ -68,11 +67,11 @@ export const articleList = [
 
 
 export const ArticleCard = ({ title, id, imageUrl }) => {
-    const navigation = useNavigation();
+    const navigate = useNavigate();
 
     return (
         <Box 
-            onClick={() => navigation.navigate('ArticleDetail', { id: id, title: title })} 
+            onClick={() => navigate(`/article/${id}`)}
             sx={{ 
                 cursor: 'pointer', 
                 maxWidth: 345, 

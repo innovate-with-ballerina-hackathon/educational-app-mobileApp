@@ -1,37 +1,26 @@
 import React, { useContext , useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { UserContext } from '../../App';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigate } from 'react-router-dom';
 
 const RoleSelectionScreen = () => {
-  const navigation = useNavigation();
   const {role, setRole} = useContext(UserContext);
-  // const [role, setRole] = useState('');
+  const navigate = useNavigate();
 
   const handleStudentSelection = () => {
     setRole('student');
     AsyncStorage.setItem('role', 'student');
-    navigation.navigate('LoginScreen');
+    sessionStorage.setItem('role', 'student');
+    navigate('/signin');
   };
 
   const handleTutorSelection = () => {
     setRole('tutor');
     AsyncStorage.setItem('role', 'tutor');
-    navigation.navigate('SubjectSelection');
+    sessionStorage.setItem('role', 'tutor');
+    navigate('/subjectSelection');
   };
-
-  // const handleRoleSelection = (role) => {
-  //   // Set the role based on the parameter
-  //   setRole(role);
-  
-  //   // Navigate based on the role
-  //   if (role === 'student') {
-  //     navigation.navigate('LoginScreen');
-  //   } else if (role === 'tutor') {
-  //     navigation.navigate('SubjectSelection');
-  //   }
-  // };
 
   return (
     <View style={styles.container}>
@@ -52,6 +41,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#f0f4f8', // Light background color for a fresh look
+    width: '100vw',
+    height: '100vh',
+
   },
   title: {
     fontSize: 24,

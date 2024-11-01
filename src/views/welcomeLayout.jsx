@@ -1,17 +1,18 @@
-import { Heading, Text, VStack, View } from "@gluestack-ui/themed";
+import React from "react";
+import { Typography, Box, Stack } from "@mui/material";
 
-export const welcomeLayout = ({ title, description, content }) => {
+export const WelcomeLayout = ({ title, description, content }) => {
     return (
-        <VStack
+        <Stack
             justifyContent="space-evenly"
-            gap={50}
+            spacing={6} // 6 is equivalent to gap={50} in Material-UI's spacing system
         >
-            <View>{content}</View>
-            <VStack>
-                <Heading>{title}</Heading>
-                <Text>{description}</Text>
-            </VStack>
-            <View>{content}</View>
-        </VStack>
+            <Box>{content}</Box>
+            <Stack spacing={2}>
+                <Typography variant="h4">{title}</Typography>
+                <Typography variant="body1">{description}</Typography>
+            </Stack>
+            <Box>{content}</Box>
+        </Stack>
     );
 };
